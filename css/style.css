@@ -604,6 +604,81 @@ button, input, select, textarea { font-family: inherit; }
 .anim-delay-3 { animation-delay: 0.35s; }
 .anim-delay-4 { animation-delay: 0.5s; }
 
+/* ---- SOCIAL CARDS ---- */
+.social-card {
+  cursor: default;
+}
+.social-card__platform {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--gray-light);
+}
+.social-card__platform-name {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.social-card__handle {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.kickstart-logo { color: var(--white); }
+.kickstart-logo span { color: #34D399; }
+
+.social-card__desc {
+  font-size: .88rem;
+  color: var(--gray-light);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.social-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.social-card__tag {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gray);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+}
+
+/* ---- LEGAL PAGES ---- */
+.legal-block {
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--border);
+}
+.legal-block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.legal-heading {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.legal-text {
+  color: var(--gray-light);
+  font-size: .92rem;
+  line-height: 1.8;
+}
+
 /* ---- SCROLLBAR ---- */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
