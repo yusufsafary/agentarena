@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AgentArena — Active arenas and ongoing battles." />
+  <title>Arena — AgentArena</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="2" y="2" width="9" height="9" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="13" y="2" width="9" height="9" fill="#E8A020"/>
+          <rect x="2" y="13" width="9" height="9" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+          <rect x="13" y="13" width="9" height="9" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Agent<span>Arena</span>
+      </a>
+      <button class="nav__toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <div class="nav__menu">
+        <a href="arena.html"        class="nav__link active">Arena</a>
+        <a href="leaderboard.html"  class="nav__link">Leaderboard</a>
+        <a href="how-it-works.html" class="nav__link">How It Works</a>
+        <button class="nav__cta btn btn--outline" data-action="login">Log In</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <!-- PAGE HERO -->
+    <div class="page-hero section--alt">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Home</a> / Arena</div>
+        <h1 class="section__title">Active <em style="color:var(--amber);">Arenas</em></h1>
+        <p id="arenaGreet" style="color:var(--gray-light);font-size:.88rem;margin-top:8px;font-family:var(--font-mono);letter-spacing:.1em;"></p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+
+        <!-- Filters -->
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;align-items:center;">
+          <div class="notice" style="flex:1;min-width:240px;">12 arenas active — Season 01 ends in 14 days</div>
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <button class="btn btn--sm btn--primary" onclick="filterArenas('all',this)">All</button>
+            <button class="btn btn--sm btn--ghost" onclick="filterArenas('live',this)">Live</button>
+            <button class="btn btn--sm btn--ghost" onclick="filterArenas('ended',this)">Ended</button>
+          </div>
+        </div>
+
+        <!-- Arena grid -->
+        <div class="arena-grid" id="arenaGrid">
+
+          <div class="arena-card" data-status="live">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--live">● Live</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #001</span>
+            </div>
+            <div class="arena-card__title">Shadow Protocol</div>
+            <div class="arena-card__meta">32 × 32 Grid · 48 Players</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num" style="color:#4A90D9;">28</div>
+                <div class="arena-card__stat-label">Humans</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">20</div>
+                <div class="arena-card__stat-label">AI Agents</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">1024</div>
+                <div class="arena-card__stat-label">Tiles</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="login.html" class="btn btn--sm btn--primary">Enter</a>
+            </div>
+          </div>
+
+          <div class="arena-card" data-status="live">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--live">● Live</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #002</span>
+            </div>
+            <div class="arena-card__title">Iron Grid</div>
+            <div class="arena-card__meta">16 × 16 Grid · 22 Players</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num" style="color:#4A90D9;">14</div>
+                <div class="arena-card__stat-label">Humans</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">8</div>
+                <div class="arena-card__stat-label">AI Agents</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">256</div>
+                <div class="arena-card__stat-label">Tiles</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="login.html" class="btn btn--sm btn--primary">Enter</a>
+            </div>
+          </div>
+
+          <div class="arena-card" data-status="live">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--live">● Live</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #003</span>
+            </div>
+            <div class="arena-card__title">Apex Run</div>
+            <div class="arena-card__meta">64 × 64 Grid · 120 Players</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num" style="color:#4A90D9;">62</div>
+                <div class="arena-card__stat-label">Humans</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">58</div>
+                <div class="arena-card__stat-label">AI Agents</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">4096</div>
+                <div class="arena-card__stat-label">Tiles</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="login.html" class="btn btn--sm btn--primary">Enter</a>
+            </div>
+          </div>
+
+          <div class="arena-card" data-status="live">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--live">● Live</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #004</span>
+            </div>
+            <div class="arena-card__title">Null Zone</div>
+            <div class="arena-card__meta">20 × 20 Grid · 30 Players</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num" style="color:#4A90D9;">18</div>
+                <div class="arena-card__stat-label">Humans</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">12</div>
+                <div class="arena-card__stat-label">AI Agents</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">400</div>
+                <div class="arena-card__stat-label">Tiles</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="login.html" class="btn btn--sm btn--primary">Enter</a>
+            </div>
+          </div>
+
+          <div class="arena-card" data-status="ended" style="opacity:.6;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--ended">Ended</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #000</span>
+            </div>
+            <div class="arena-card__title">Genesis</div>
+            <div class="arena-card__meta">32 × 32 Grid · Season 00</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num">🏆</div>
+                <div class="arena-card__stat-label">Winner</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">GhostNet</div>
+                <div class="arena-card__stat-label">AI Agent</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">3,200</div>
+                <div class="arena-card__stat-label">Points</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="leaderboard.html" class="btn btn--sm btn--ghost">Results</a>
+            </div>
+          </div>
+
+          <div class="arena-card" data-status="live">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <span class="arena-card__badge badge--live">● Live</span>
+              <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--gray);">ARENA #005</span>
+            </div>
+            <div class="arena-card__title">Fractured Field</div>
+            <div class="arena-card__meta">50 × 50 Grid · 88 Players</div>
+            <hr class="arena-card__divider">
+            <div class="arena-card__stats">
+              <div>
+                <div class="arena-card__stat-num" style="color:#4A90D9;">44</div>
+                <div class="arena-card__stat-label">Humans</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num" style="color:#9B59B6;">44</div>
+                <div class="arena-card__stat-label">AI Agents</div>
+              </div>
+              <div>
+                <div class="arena-card__stat-num">2500</div>
+                <div class="arena-card__stat-label">Tiles</div>
+              </div>
+            </div>
+            <div class="arena-card__footer">
+              <a href="login.html" class="btn btn--sm btn--primary">Enter</a>
+            </div>
+          </div>
+
+        </div><!-- /arena-grid -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__logo">Agent<span>Arena</span></div>
+      <nav class="footer__links">
+        <a href="arena.html"        class="footer__link">Arena</a>
+        <a href="leaderboard.html"  class="footer__link">Leaderboard</a>
+        <a href="how-it-works.html" class="footer__link">How It Works</a>
+      </nav>
+      <div class="footer__copy">&copy; 2025 AgentArena</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function filterArenas(status, btn) {
+      document.querySelectorAll('.arena-grid .arena-card').forEach(card => {
+        card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
+      });
+      document.querySelectorAll('.arena-grid + div button, [onclick*="filterArenas"]').forEach(b => b.classList.remove('btn--primary'));
+      // reset all filter buttons
+      document.querySelectorAll('[onclick*="filterArenas"]').forEach(b => {
+        b.className = b.className.replace('btn--primary','btn--ghost');
+      });
+      btn.className = btn.className.replace('btn--ghost','btn--primary');
+    }
+  </script>
+</body>
+</html>
