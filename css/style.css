@@ -604,3 +604,118 @@ button, input, select, textarea { font-family: inherit; }
   .hero { padding-top: calc(var(--nav-h) + 40px); }
   .login-box { padding: 32px 20px; }
 }
+
+/* ============================================================
+   LOGO MARK (grid tile mark)
+   ============================================================ */
+.nav__mark { flex-shrink: 0; }
+.nav__logo-text {
+  font-size: 1.0625rem; font-weight: 800;
+  letter-spacing: -0.04em; color: var(--white); line-height: 1;
+}
+.footer__logo {
+  font-size: 1rem; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--white); display: flex; align-items: center;
+}
+
+/* ============================================================
+   ARENA DEMO SECTION
+   ============================================================ */
+.arena-demo-frame {
+  background: rgba(10,11,18,0.95);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(125,164,255,0.06), 0 40px 80px rgba(0,0,0,0.5);
+}
+.arena-demo-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  background: rgba(8,9,14,0.9); flex-wrap: wrap; gap: 12px;
+}
+.arena-demo-info { display: flex; align-items: center; gap: 16px; }
+.arena-demo-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.8125rem; font-weight: 500; color: var(--white-80);
+}
+.arena-demo-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #34D399;
+  box-shadow: 0 0 8px rgba(52,211,153,0.8); flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+.arena-demo-cycle {
+  font-size: 0.75rem; color: var(--white-40); font-weight: 500;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: var(--radius-full); padding: 3px 10px;
+}
+.arena-demo-scores {
+  display: flex; align-items: center; gap: 20px;
+}
+.arena-demo-score { text-align: center; }
+.arena-demo-score-label { font-size: 0.7rem; color: var(--white-40); margin-bottom: 2px; white-space: nowrap; }
+.arena-demo-score-val { font-size: 1.125rem; font-weight: 800; letter-spacing: -0.03em; }
+.arena-demo-score--ai .arena-demo-score-val { color: #C39BD3; }
+.arena-demo-score--human .arena-demo-score-val { color: #7DA4FF; }
+
+.arena-demo-body {
+  display: grid; grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 700px) {
+  .arena-demo-body { grid-template-columns: 1fr 220px; }
+}
+.arena-canvas { width: 100%; display: block; background: rgba(8,9,14,0.8); }
+.arena-demo-log {
+  border-left: 1px solid var(--border);
+  padding: 12px;
+  background: rgba(8,9,14,0.95);
+  font-size: 0.7rem; line-height: 1.6;
+  overflow: hidden; max-height: 300px;
+  display: none;
+}
+@media (min-width: 700px) { .arena-demo-log { display: block; } }
+.arena-log-item {
+  padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.arena-log-time { color: rgba(255,255,255,0.2); font-size: 0.6rem; }
+
+.arena-demo-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; border-top: 1px solid var(--border);
+  background: rgba(8,9,14,0.9); flex-wrap: wrap; gap: 8px;
+}
+.arena-demo-legend {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; color: var(--white-60); flex-wrap: wrap;
+}
+.arena-legend-dot {
+  display: inline-block; width: 10px; height: 10px;
+  border-radius: 2px; vertical-align: middle; margin-right: 2px;
+}
+
+.arena-stats-row {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: center; gap: 0; margin-top: 40px;
+}
+.arena-stat { text-align: center; padding: 0 32px; }
+.arena-stat__num {
+  font-size: 2.25rem; font-weight: 800; letter-spacing: -0.04em; color: var(--white);
+}
+.arena-stat__label { font-size: 0.8125rem; color: var(--white-40); margin-top: 4px; }
+.arena-stat-divider { width: 1px; height: 40px; background: var(--border); flex-shrink: 0; }
+@media (max-width: 640px) {
+  .arena-stat { padding: 12px 20px; }
+  .arena-stat-divider { display: none; }
+}
+
+/* Pulse animation for live dot */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(52,211,153,0.6); }
+  50% { box-shadow: 0 0 14px rgba(52,211,153,1); }
+}
+.hero__badge-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #34D399;
+  box-shadow: 0 0 6px rgba(52,211,153,0.8); flex-shrink: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
