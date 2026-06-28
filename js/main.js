@@ -1,152 +1,124 @@
-/* ============================================================
-   AgentArena - Main JS
-   ============================================================ */
+/* AgentArena — main.js (cosmoq-style rebranding) */
 
-// ---- Nav hamburger ----
+/* ---- Mobile nav toggle ---- */
 const toggle = document.querySelector('.nav__toggle');
-const menu   = document.querySelector('.nav__menu');
-if (toggle && menu) {
+const mobileMenu = document.querySelector('.nav__mobile');
+
+if (toggle && mobileMenu) {
   toggle.addEventListener('click', () => {
-    const open = menu.classList.toggle('open');
-    toggle.classList.toggle('open', open);
+    const open = toggle.classList.toggle('open');
+    mobileMenu.classList.toggle('open', open);
     toggle.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
   });
-  // close on link click
-  menu.querySelectorAll('a, button').forEach(el => {
+  mobileMenu.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('click', () => {
-      menu.classList.remove('open');
       toggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     });
   });
 }
 
-// ---- Highlight active nav link ----
-(function() {
-  const links = document.querySelectorAll('.nav__link');
-  const path  = window.location.pathname.split('/').pop() || 'index.html';
-  links.forEach(a => {
-    const href = (a.getAttribute('href') || '').split('/').pop();
-    if (href === path) a.classList.add('active');
+/* ---- Active nav link ---- */
+(function () {
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav__link').forEach(link => {
+    const href = (link.getAttribute('href') || '').split('/').pop();
+    if (href === path) link.classList.add('active');
   });
 })();
 
-// ---- Auth state (localStorage placeholder) ----
+/* ---- Auth state ---- */
 const Auth = {
   KEY: 'aa_user',
-  get() {
-    try { return JSON.parse(localStorage.getItem(Auth.KEY)); }
-    catch { return null; }
-  },
-  set(user) { localStorage.setItem(Auth.KEY, JSON.stringify(user)); },
-  clear()   { localStorage.removeItem(Auth.KEY); },
+  get() { try { return JSON.parse(localStorage.getItem(Auth.KEY)); } catch { return null; } },
+  set(u) { localStorage.setItem(Auth.KEY, JSON.stringify(u)); },
+  clear() { localStorage.removeItem(Auth.KEY); },
 };
 
-// ---- Update nav CTA based on auth state ----
 function syncAuthNav() {
   const user = Auth.get();
-  const ctas = document.querySelectorAll('.nav__cta');
-  ctas.forEach(btn => {
-    if (user) {
-      btn.textContent = 'Log Out';
-      btn.dataset.action = 'logout';
-    } else {
-      btn.textContent = 'Log In';
-      btn.dataset.action = 'login';
-    }
+  document.querySelectorAll('.nav__cta').forEach(btn => {
+    btn.textContent = user ? 'Log Out' : 'Get Started';
     btn.onclick = () => {
-      if (btn.dataset.action === 'logout') {
-        Auth.clear();
-        window.location.href = 'index.html';
-      } else {
-        window.location.href = 'login.html';
-      }
+      if (user) { Auth.clear(); location.href = 'index.html'; }
+      else { location.href = 'login.html'; }
     };
   });
 }
 syncAuthNav();
 
-// ---- Login page logic ----
+/* ---- Login page ---- */
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
-  // Tab switching
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      const which = tab.dataset.tab;
-      document.querySelectorAll('.tab-panel').forEach(panel => {
-        panel.hidden = panel.dataset.panel !== which;
+      document.querySelectorAll('.tab-panel').forEach(p => {
+        p.hidden = p.dataset.panel !== tab.dataset.tab;
       });
     });
   });
-
-  // Agent type selector
   document.querySelectorAll('.type-option').forEach(opt => {
     opt.addEventListener('click', () => {
       opt.closest('.type-selector').querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
       opt.classList.add('selected');
     });
   });
-
-  // Form submit
   loginForm.addEventListener('submit', e => {
     e.preventDefault();
-    const email    = loginForm.querySelector('#email')?.value || 'agent@arena.gg';
-    const type     = loginForm.querySelector('.type-option.selected')?.dataset.type || 'human';
-    const username = email.split('@')[0];
-
-    Auth.set({ username, email, type, loginAt: Date.now() });
-
-    // Redirect to arena
-    window.location.href = 'arena.html';
+    const email = loginForm.querySelector('#email')?.value || 'agent@agentarena.id';
+    const type = loginForm.querySelector('.type-option.selected')?.dataset.type || 'human';
+    Auth.set({ username: email.split('@')[0], email, type, loginAt: Date.now() });
+    location.href = 'arena.html';
   });
 }
 
-// ---- Animate stat counters ----
+/* ---- Count-up ---- */
 function animateCount(el, target, duration) {
   const start = performance.now();
-  const isFloat = target % 1 !== 0;
-  function step(now) {
+  (function step(now) {
     const p = Math.min((now - start) / duration, 1);
     const ease = 1 - Math.pow(1 - p, 3);
-    const val = target * ease;
-    el.textContent = isFloat
-      ? '$' + val.toFixed(2) + 'K'
-      : Math.floor(val).toLocaleString();
+    el.textContent = Math.floor(target * ease).toLocaleString();
     if (p < 1) requestAnimationFrame(step);
-    else el.textContent = isFloat
-      ? '$' + target.toFixed(2) + 'K'
-      : target.toLocaleString();
-  }
-  requestAnimationFrame(step);
+    else el.textContent = target.toLocaleString();
+  })(start);
 }
-
 const statEls = document.querySelectorAll('[data-count]');
 if (statEls.length) {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el  = entry.target;
-        const raw = parseFloat(el.dataset.count);
-        animateCount(el, raw, 1200);
-        obs.unobserve(el);
-      }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateCount(e.target, +e.target.dataset.count, 1200); obs.unobserve(e.target); }
     });
   }, { threshold: 0.4 });
   statEls.forEach(el => obs.observe(el));
 }
 
-// ---- Arena page: show user greeting ----
+/* ---- Arena greeting ---- */
 const greetEl = document.getElementById('arenaGreet');
 if (greetEl) {
   const user = Auth.get();
-  if (user) {
-    greetEl.textContent = `Welcome back, ${user.username.toUpperCase()}.`;
-  } else {
-    greetEl.textContent = 'Connect an account to track your battles.';
-  }
+  greetEl.textContent = user ? `Welcome back, ${user.username.toUpperCase()}.` : 'Connect an account to track your battles.';
 }
+
+/* ---- Scroll reveal ---- */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.feature-card, .arena-card, .pricing-card, .step').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
+  revealObs.observe(el);
+});
