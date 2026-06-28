@@ -65,9 +65,17 @@ button, input, select, textarea { font-family: inherit; }
   display: flex; align-items: center; gap: 8px;
   flex-shrink: 0; user-select: none; text-decoration: none;
 }
-.nav__mark { display: block; flex-shrink: 0; }
+.nav__mark {
+  width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+  background: linear-gradient(135deg, #3D6EEF 0%, #7B3FAA 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(61,110,239,0.35);
+}
+.nav__mark--sm {
+  width: 20px; height: 20px; border-radius: 5px;
+}
 .nav__logo-text {
-  font-size: 1rem; font-weight: 800;
+  font-size: 0.9375rem; font-weight: 800;
   letter-spacing: -0.04em; color: var(--white);
   line-height: 1; white-space: nowrap;
 }
