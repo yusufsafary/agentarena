@@ -1,0 +1,308 @@
+/* ============================================================
+   AgentArena - Interaction & Micro-animation Layer
+   Loaded last. Adds hover states, ripples, transitions.
+   ============================================================ */
+
+/* ── Card hover lift ─────────────────────────────────────── */
+.feature-card,
+.arena-card,
+.pricing-card {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+.feature-card:hover,
+.arena-card:hover {
+  border-color: rgba(202, 255, 0, 0.30) !important;
+  box-shadow:
+    0 0 0 1px rgba(202, 255, 0, 0.12),
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(202, 255, 0, 0.06);
+}
+
+.pricing-card:hover {
+  border-color: rgba(202, 255, 0, 0.28) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.pricing-card.featured:hover {
+  box-shadow:
+    0 0 0 1px rgba(202, 255, 0, 0.3),
+    0 12px 40px rgba(202, 255, 0, 0.12);
+}
+
+/* ── Button ripple ───────────────────────────────────────── */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 0.15s;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.btn:active::after {
+  opacity: 1;
+}
+
+/* Primary button lift + glow (extends rebrand.css opacity rule) */
+.btn--primary:hover,
+.hero__cta:hover {
+  transform: translateY(-1px);
+  /* box-shadow intentionally left in rebrand.css — no conflict */
+}
+
+.btn--primary:active,
+.hero__cta:active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Outline button hover */
+.btn--outline:hover {
+  background: rgba(202, 255, 0, 0.06);
+  border-color: rgba(202, 255, 0, 0.4);
+}
+
+/* ── Nav link animated underline ─────────────────────────── */
+.nav__link {
+  position: relative;
+  text-decoration: none;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: #CAFF00;
+  transition: left 0.2s ease, right 0.2s ease;
+  pointer-events: none;
+}
+
+.nav__link:hover::after,
+.nav__link.active::after {
+  left: 0;
+  right: 0;
+}
+
+/* ── Arena stat number pop ───────────────────────────────── */
+.arena-stat__num,
+[data-count] {
+  display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+/* ── Step number hover ───────────────────────────────────── */
+.step__num {
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.step:hover .step__num {
+  color: #CAFF00;
+  text-shadow: 0 0 20px rgba(202, 255, 0, 0.5);
+}
+
+/* ── Feature card icon hover ─────────────────────────────── */
+.feat__icon,
+.cap__icon {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover .feat__icon,
+.feature-card:hover .cap__icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 16px rgba(202, 255, 0, 0.25);
+}
+
+/* ── Arena badge pulse ───────────────────────────────────── */
+.badge--live {
+  position: relative;
+  overflow: visible;
+}
+
+.badge--live::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1px solid rgba(202, 255, 0, 0.4);
+  animation: badge-ring 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes badge-ring {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 0; transform: scale(1.25); }
+}
+
+/* ── Arena demo dot pulse (header) ──────────────────────── */
+.arena-demo-dot {
+  animation: live-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes live-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── Leaderboard rows ────────────────────────────────────── */
+#lbBody tr {
+  transition: background 0.12s ease;
+  border-radius: 6px;
+}
+
+/* ── Code block glow ─────────────────────────────────────── */
+pre {
+  border: 1px solid rgba(202, 255, 0, 0.12) !important;
+  transition: border-color 0.2s;
+}
+
+pre:hover {
+  border-color: rgba(202, 255, 0, 0.25) !important;
+}
+
+/* ── Topbar token link hover ─────────────────────────────── */
+.topbar__token-link {
+  transition: opacity 0.15s;
+}
+
+.topbar__token-link:hover {
+  opacity: 0.9;
+}
+
+/* ── Hero CTA entrance ───────────────────────────────────── */
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+}
+
+/* ── Footer links ────────────────────────────────────────── */
+.footer__link {
+  position: relative;
+  transition: color 0.15s;
+}
+
+.footer__link:hover {
+  color: #CAFF00;
+}
+
+/* ── Type selector cards ─────────────────────────────────── */
+.type-option {
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+
+.type-option:hover {
+  transform: translateY(-2px);
+}
+
+.type-option.selected {
+  border-color: rgba(202, 255, 0, 0.5) !important;
+  background: rgba(202, 255, 0, 0.06) !important;
+}
+
+/* ── Form input focus glow ───────────────────────────────── */
+.form-input {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgba(202, 255, 0, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(202, 255, 0, 0.08) !important;
+}
+
+/* ── Notice pill ─────────────────────────────────────────── */
+.notice {
+  border-left: 2px solid #CAFF00;
+  padding-left: 16px;
+  animation: notice-slide-in 0.5s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes notice-slide-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Mockup window shimmer ───────────────────────────────── */
+.mockup-window {
+  animation: mockup-in 0.8s cubic-bezier(.22,1,.36,1) 0.3s both;
+}
+
+@keyframes mockup-in {
+  from { opacity: 0; transform: translateY(32px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Scroll hint arrow ───────────────────────────────────── */
+.scroll-hint {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+/* ── Page hero entrance ──────────────────────────────────── */
+.page-hero__eyebrow,
+.page-hero__title,
+.page-hero__desc {
+  animation: fade-up 0.6s cubic-bezier(.22,1,.36,1) both;
+}
+
+.page-hero__title { animation-delay: 0.08s; }
+.page-hero__desc  { animation-delay: 0.16s; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Arena stat row ──────────────────────────────────────── */
+.arena-stat {
+  transition: transform 0.2s ease;
+}
+
+.arena-stat:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Hero badge pulse ring ───────────────────────────────── */
+.hero__badge {
+  position: relative;
+  overflow: visible;
+}
+
+.hero__badge::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid rgba(202, 255, 0, 0.2);
+  animation: badge-ring 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Mobile: remove tilt (touch devices) ────────────────── */
+@media (hover: none) {
+  .feature-card,
+  .arena-card,
+  .pricing-card {
+    transform: none !important;
+  }
+}

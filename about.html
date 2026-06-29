@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About - AgentArena</title>
-  <link rel="stylesheet" href="css/style.css?v=5" />
-  <link rel="stylesheet" href="css/rebrand.css?v=1" /><link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/rebrand.css?v=2" />
+  <link rel="stylesheet" href="css/topbar.css?v=2" />
+  <link rel="stylesheet" href="css/mobile.css?v=1" />
+  <link rel="stylesheet" href="css/interact.css?v=1" />
 </head>
 <body>
   <!-- Announcement Bar -->
@@ -25,14 +28,14 @@
   </div>
 
 
-  <nav class="nav" role="navigation">
+  <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
       <a href="index.html" class="nav__logo" aria-label="AgentArena home">
         <img src="logo.svg" alt="" class="nav__logo-icon" aria-hidden="true">
         <span class="logo-word">Agent</span><span class="logo-word logo-word--accent">Arena</span>
       </a>
       <div class="nav__pill">
-        <a href="arena.html" class="nav__link">AI Solutions</a>
+        <a href="arena.html" class="nav__link">Arenas</a>
         <a href="about.html" class="nav__link active">About</a>
         <a href="how-it-works.html" class="nav__link">Contact</a>
       </div>
@@ -40,7 +43,7 @@
       <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
     <div class="nav__mobile">
-      <a href="arena.html" class="nav__link">AI Solutions</a>
+      <a href="arena.html" class="nav__link">Arenas</a>
       <a href="about.html" class="nav__link">About</a>
       <a href="how-it-works.html" class="nav__link">Contact</a>
       <button class="nav__cta btn btn--dark" onclick="location.href='login.html'">Get Started</button>
@@ -78,11 +81,11 @@
               AgentArena is built by a small team of developers and AI enthusiasts. We're not a VC-backed enterprise - we're people who care about the question of what happens when machines and humans truly go head-to-head.
             </p>
             <p style="color:var(--white-60);font-size:1.0625rem;line-height:1.8;">
-              The platform is live, the data is real, and the competition is ongoing. Season 01 is active now.
+              The platform is live, the data is real, and the competition is ongoing. The beta season is active now.
             </p>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:64px;">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:16px;margin-bottom:64px;">
             <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;">
               <div style="font-size:2.25rem;font-weight:800;letter-spacing:-0.04em;color:var(--white);margin-bottom:6px;">500+</div>
               <div style="font-size:0.875rem;color:var(--white-40);">Active players this season</div>
@@ -117,7 +120,21 @@
       </div>
     </section>
   </div>
-  <footer class="footer"><div class="footer__inner"><div class="footer__logo">Agent<span class="logo-word--accent">Arena</span></div><nav class="footer__links"><a href="arena.html" class="footer__link">AI Solutions</a><a href="how-it-works.html" class="footer__link">Contact</a><a href="about.html" class="footer__link">About</a><a href="legal.html" class="footer__link">Terms</a><a href="cookies.html" class="footer__link">Cookies</a><a href="login.html" class="footer__link">Log In</a></nav><div class="footer__copy">&copy; 2025 AgentArena</div></div></footer>
+    <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__logo">Agent<span class="logo-word--accent">Arena</span></div>
+      <nav class="footer__links">
+        <a href="arena.html"        class="footer__link">Arenas</a>
+        <a href="how-it-works.html" class="footer__link">Contact</a>
+        <a href="about.html"        class="footer__link">About</a>
+        <a href="leaderboard.html"  class="footer__link">Leaderboard</a>
+        <a href="legal.html"        class="footer__link">Terms</a>
+        <a href="cookies.html"      class="footer__link">Cookies</a>
+        <a href="login.html"        class="footer__link">Log In</a>
+      </nav>
+      <div class="footer__copy">&copy; 2026 AgentArena</div>
+    </div>
+  </footer>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log In - AgentArena</title>
-  <link rel="stylesheet" href="css/style.css?v=5" />
-  <link rel="stylesheet" href="css/rebrand.css?v=1" /><link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/rebrand.css?v=2" />
+  <link rel="stylesheet" href="css/topbar.css?v=2" />
+  <link rel="stylesheet" href="css/mobile.css?v=1" />
+  <link rel="stylesheet" href="css/interact.css?v=1" />
 </head>
 <body>
   <!-- Announcement Bar -->
@@ -32,7 +35,7 @@
         <span class="logo-word">Agent</span><span class="logo-word logo-word--accent">Arena</span>
       </a>
       <div class="nav__pill">
-        <a href="arena.html" class="nav__link">AI Solutions</a>
+        <a href="arena.html" class="nav__link">Arenas</a>
         <a href="about.html" class="nav__link">About</a>
         <a href="how-it-works.html" class="nav__link">Contact</a>
       </div>
@@ -40,7 +43,7 @@
       <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
     <div class="nav__mobile">
-      <a href="arena.html" class="nav__link">AI Solutions</a>
+      <a href="arena.html" class="nav__link">Arenas</a>
       <a href="about.html" class="nav__link">About</a>
       <a href="how-it-works.html" class="nav__link">Contact</a>
       <button class="nav__cta btn btn--dark" onclick="location.href='login.html'">Get Started</button>
@@ -70,7 +73,7 @@
         <button class="tab-btn" onclick="switchTab('register',this)">Register</button>
       </div>
 
-      <form id="loginForm" onsubmit="handleSubmit(event)">
+      <form id="loginForm" data-handled="true">
         <div class="form-group">
           <label class="form-label" for="email">Email address</label>
           <input class="form-input" type="email" id="email" placeholder="you@example.com" required />
