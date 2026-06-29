@@ -1,10 +1,10 @@
 /* ============================================================
-   AgentArena — Rebrand Override
+   AgentArena — Rebrand Override v2
    Palette: Neon Lime (#CAFF00) → Hot Magenta (#FF0080)
-   Font: Space Grotesk + Syne
+   Font:    Bebas Neue (logo / display) + DM Sans (body)
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
 /* ── Variable Overrides ──────────────────────────────────── */
 :root {
@@ -17,16 +17,27 @@
   --border-2:  rgba(202, 255, 0, 0.12);
 }
 
-/* ── Typography ──────────────────────────────────────────── */
+/* ── Body Typography ─────────────────────────────────────── */
 body {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
 }
 
+/* ── Display / Heading Typography ────────────────────────── */
 h1, h2, h3,
 .hero__title,
 .section__title,
-.hero__badge {
-  font-family: 'Syne', 'Space Grotesk', sans-serif;
+.hero__eyebrow,
+.step__title {
+  font-family: 'Bebas Neue', 'DM Sans', sans-serif;
+  letter-spacing: 0.04em;
+  font-weight: 400; /* Bebas Neue is a single-weight display face */
+  line-height: 1.05;
+}
+
+/* hero__title gets extra letter-spacing for drama */
+.hero__title {
+  letter-spacing: 0.06em;
 }
 
 /* ── Logo ────────────────────────────────────────────────── */
@@ -34,36 +45,46 @@ h1, h2, h3,
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
 }
 
 .nav__logo-icon {
-  height: 32px;
-  width: 32px;
+  height: 30px;
+  width: 30px;
   display: block;
   flex-shrink: 0;
 }
 
+/* "Agent" in white */
 .logo-word {
-  font-family: 'Syne', 'Space Grotesk', sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: 'Bebas Neue', 'DM Sans', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   color: #ffffff;
   line-height: 1;
   white-space: nowrap;
+  -webkit-text-fill-color: #ffffff; /* reset any inherited gradient */
+  background: none;
 }
 
+/* "Arena" with neon lime→magenta gradient */
 .logo-word--accent {
-  font-family: 'Syne', 'Space Grotesk', sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: 'Bebas Neue', 'DM Sans', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   line-height: 1;
   white-space: nowrap;
   background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Adjust logo size at wider viewports */
+@media (min-width: 768px) {
+  .logo-word, .logo-word--accent { font-size: 1.6rem; }
 }
 
 /* ── Hero Badge ──────────────────────────────────────────── */
@@ -75,6 +96,7 @@ h1, h2, h3,
 .hero__badge {
   border-color: rgba(202, 255, 0, 0.25);
   color: var(--lime);
+  font-family: 'DM Sans', sans-serif;
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */
@@ -82,19 +104,22 @@ h1, h2, h3,
 .hero__cta {
   background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
   color: #06070A;
-  font-family: 'Syne', 'Space Grotesk', sans-serif;
-  font-weight: 800;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .btn--primary:hover,
 .hero__cta:hover {
   opacity: 0.9;
-  box-shadow: 0 0 24px rgba(202, 255, 0, 0.35);
+  box-shadow: 0 0 28px rgba(202, 255, 0, 0.35);
 }
 
 .nav__cta.btn--dark {
   border-color: rgba(202, 255, 0, 0.3);
   color: var(--lime);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
 }
 
 .nav__cta.btn--dark:hover {
@@ -103,6 +128,11 @@ h1, h2, h3,
 }
 
 /* ── Nav Links ───────────────────────────────────────────── */
+.nav__link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
 .nav__link:hover,
 .nav__link.active {
   background: rgba(202, 255, 0, 0.1);
@@ -111,9 +141,12 @@ h1, h2, h3,
 
 /* ── Step Numbers ────────────────────────────────────────── */
 .step__num {
-  background: rgba(202, 255, 0, 0.1);
-  border-color: rgba(202, 255, 0, 0.3);
+  background: rgba(202, 255, 0, 0.10);
+  border-color: rgba(202, 255, 0, 0.30);
   color: var(--lime);
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
 }
 
 /* ── Prose accents ───────────────────────────────────────── */
@@ -121,34 +154,42 @@ h1, h2, h3,
 .prose a          { color: var(--lime); }
 .legal-block a    { color: var(--lime); }
 
-/* ── Section title accent line ───────────────────────────── */
+/* ── Section tag / eyebrow ───────────────────────────────── */
 .section__eyebrow,
 .section__tag {
   color: var(--lime);
   border-color: rgba(202, 255, 0, 0.3);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
 }
 
 /* ── Hero gradient background — neon pulse ────────────────── */
 .hero__aurora {
-  background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(202,255,0,0.12) 0%, transparent 70%),
-              radial-gradient(ellipse 50% 60% at 30% 60%, rgba(255,0,128,0.10) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 70% 40%,
+      rgba(202,255,0,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 30% 60%,
+      rgba(255,0,128,0.10) 0%, transparent 70%);
 }
 
 .hero__aurora-top {
-  background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(202,255,0,0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse 80% 40% at 50% 0%,
+      rgba(202,255,0,0.08) 0%, transparent 60%);
 }
 
-/* ── Feature/capability card accents ────────────────────── */
+/* ── Feature / capability card icons ────────────────────── */
 .feat__icon,
 .cap__icon {
   color: var(--lime);
-  background: rgba(202, 255, 0, 0.1);
-  border-color: rgba(202, 255, 0, 0.2);
+  background: rgba(202, 255, 0, 0.10);
+  border-color: rgba(202, 255, 0, 0.20);
 }
 
-/* ── Leaderboard / score colors ──────────────────────────── */
-.score-ai   { color: var(--lime); }
-.score-human{ color: #FF0080; }
+/* ── Score colours (arena) ───────────────────────────────── */
+.score-ai    { color: var(--lime); }
+.score-human { color: #FF0080; }
 
 /* ── Gradient text utility ────────────────────────────────── */
 .text-gradient {
@@ -158,7 +199,7 @@ h1, h2, h3,
   background-clip: text;
 }
 
-/* ── Scrollbar accent ─────────────────────────────────────── */
+/* ── Scrollbar ────────────────────────────────────────────── */
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(#CAFF00, #FF0080);
 }
