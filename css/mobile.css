@@ -1,0 +1,169 @@
+/* ============================================================
+   AgentArena — Mobile-first layout fixes
+   Loaded last so overrides are clean
+   ============================================================ */
+
+/* ── Base reset tightening ───────────────────────────────── */
+html { -webkit-text-size-adjust: 100%; }
+
+body { overflow-x: hidden; }
+
+/* ── Nav — mobile ────────────────────────────────────────── */
+.nav {
+  padding: 0 16px;
+}
+
+/* Shrink logo icon slightly on tiny screens */
+.nav__logo-icon {
+  height: 26px;
+  width: 26px;
+}
+@media (min-width: 400px) {
+  .nav__logo-icon { height: 30px; width: 30px; }
+}
+
+.logo-word,
+.logo-word--accent {
+  font-size: 1.25rem;
+}
+@media (min-width: 400px) {
+  .logo-word, .logo-word--accent { font-size: 1.4rem; }
+}
+@media (min-width: 768px) {
+  .logo-word, .logo-word--accent { font-size: 1.6rem; }
+}
+
+/* Hide desktop CTA button on mobile — redundant with mobile menu */
+.nav__cta { display: none; }
+@media (min-width: 768px) {
+  .nav__cta { display: inline-flex; }
+}
+
+/* ── Hero — mobile ───────────────────────────────────────── */
+.hero__content {
+  padding: 0 16px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .hero__content { padding: 0 32px; }
+}
+
+.hero__title {
+  font-size: clamp(2rem, 9vw, 5.5rem);
+  letter-spacing: 0.04em;   /* Bebas Neue looks better with spacing */
+  line-height: 1.08;
+}
+
+.hero__sub {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  padding: 0 4px;
+}
+@media (min-width: 480px) {
+  .hero__sub { font-size: 0.9375rem; }
+}
+@media (min-width: 768px) {
+  .hero__sub { font-size: 1.0625rem; }
+}
+
+.hero__badge {
+  font-size: 0.72rem;
+  padding: 5px 14px;
+  margin-bottom: 20px;
+}
+@media (min-width: 480px) {
+  .hero__badge { font-size: 0.8rem; padding: 6px 18px; margin-bottom: 28px; }
+}
+
+.hero__cta {
+  font-size: 0.875rem;
+  padding: 11px 24px;
+  margin-bottom: 40px;
+}
+@media (min-width: 768px) {
+  .hero__cta { font-size: 0.9375rem; padding: 13px 32px; margin-bottom: 80px; }
+}
+
+/* ── Mockup — mobile ─────────────────────────────────────── */
+.hero__mockup {
+  padding: 0 12px;
+}
+@media (min-width: 480px) {
+  .hero__mockup { padding: 0 16px; }
+}
+@media (min-width: 768px) {
+  .hero__mockup { padding: 0 24px; }
+}
+
+/* ── Sections — mobile ───────────────────────────────────── */
+.section {
+  padding: 60px 0;
+}
+@media (min-width: 768px) {
+  .section { padding: 100px 0; }
+}
+
+.section__title {
+  font-size: clamp(1.75rem, 6vw, 3rem);
+  letter-spacing: 0.04em;
+}
+
+/* ── Cards — mobile ──────────────────────────────────────── */
+.feature-card {
+  padding: 20px;
+}
+@media (min-width: 480px) {
+  .feature-card { padding: 24px; }
+}
+@media (min-width: 768px) {
+  .feature-card { padding: 32px; }
+}
+
+/* ── Footer — mobile ─────────────────────────────────────── */
+.footer__inner {
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+@media (min-width: 640px) {
+  .footer__inner { flex-direction: row; text-align: left; }
+}
+
+.footer__links {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+}
+@media (min-width: 640px) {
+  .footer__links { justify-content: flex-start; }
+}
+
+/* ── Pricing section — mobile ────────────────────────────── */
+.pricing-grid {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 600px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── Arena demo body — hide log sidebar on mobile ────────── */
+.arena-demo-body {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .arena-demo-body { grid-template-columns: 1fr 180px; }
+}
+@media (min-width: 768px) {
+  .arena-demo-body { grid-template-columns: 1fr 220px; }
+}
+
+/* ── Page wrap — inner pages ─────────────────────────────── */
+.page-wrap .container {
+  padding: 40px 16px;
+}
+@media (min-width: 768px) {
+  .page-wrap .container { padding: 60px 32px; }
+}

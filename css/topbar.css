@@ -1,12 +1,13 @@
 /* ============================================================
-   AgentArena — Topbar: X account + $ARENA token launch
+   AgentArena — Topbar: X @astridholmx + $ARENA token launch
+   Mobile-first
    ============================================================ */
 
 :root {
-  --topbar-h: 38px;
+  --topbar-h: 36px;
 }
 
-/* ── Topbar strip ────────────────────────────────────────── */
+/* ── Bar ─────────────────────────────────────────────────── */
 .topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -14,146 +15,179 @@
   height: var(--topbar-h);
   display: flex;
   align-items: center;
-  background: linear-gradient(90deg,
-    rgba(202,255,0,0.10) 0%,
-    rgba(0,0,0,0.85)    40%,
-    rgba(0,0,0,0.85)    60%,
-    rgba(255,0,128,0.10) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(202,255,0,0.18);
+  overflow: hidden;
+  background: #06070A;
+  border-bottom: 1px solid rgba(202, 255, 0, 0.18);
 }
 
+/* subtle neon side glows */
+.topbar::before,
+.topbar::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  pointer-events: none;
+}
+.topbar::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(202,255,0,0.10), transparent);
+}
+.topbar::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(255,0,128,0.10), transparent);
+}
+
+/* ── Inner layout ────────────────────────────────────────── */
 .topbar__inner {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  white-space: nowrap;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
 }
 
-@media (min-width: 768px) {
-  .topbar__inner { padding: 0 32px; justify-content: space-between; }
+@media (min-width: 640px) {
+  .topbar__inner { padding: 0 32px; }
 }
 
-/* ── X (Twitter) link ─────────────────────────────────────── */
+/* ── X link ──────────────────────────────────────────────── */
 .topbar__x-link {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: 'DM Sans', -apple-system, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.85);
-  text-decoration: none;
+  gap: 5px;
   flex-shrink: 0;
+  text-decoration: none;
+  color: rgba(255,255,255,0.65);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
   transition: color 0.15s;
 }
-
 .topbar__x-link:hover { color: #ffffff; }
 
 .topbar__x-icon {
-  width: 13px;
-  height: 13px;
-  display: block;
-  flex-shrink: 0;
-  color: rgba(255,255,255,0.7);
+  width: 11px; height: 11px;
+  display: block; flex-shrink: 0;
+  fill: currentColor;
 }
 
-/* ── Separator ────────────────────────────────────────────── */
-.topbar__sep {
-  color: rgba(202,255,0,0.25);
-  margin: 0 14px;
-  font-size: 0.9rem;
-  flex-shrink: 0;
+/* Hide handle text on very small screens, show icon only */
+.topbar__x-handle {
   display: none;
 }
+@media (min-width: 400px) {
+  .topbar__x-handle { display: inline; }
+}
 
-@media (min-width: 480px) { .topbar__sep { display: block; } }
+/* ── Separator ───────────────────────────────────────────── */
+.topbar__sep {
+  flex-shrink: 0;
+  width: 1px;
+  height: 14px;
+  background: rgba(202,255,0,0.20);
+  display: none;
+}
+@media (min-width: 400px) {
+  .topbar__sep { display: block; }
+}
 
-/* ── Token launch link ────────────────────────────────────── */
+/* ── Token launch link ───────────────────────────────────── */
 .topbar__token-link {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-family: 'DM Sans', -apple-system, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.8);
+  gap: 6px;
+  min-width: 0;
   text-decoration: none;
-  flex-shrink: 0;
+  color: rgba(255,255,255,0.80);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color 0.15s;
 }
-
 .topbar__token-link:hover { color: #ffffff; }
 
 /* Live pulse dot */
 .topbar__live-dot {
+  flex-shrink: 0;
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: #CAFF00;
-  box-shadow: 0 0 6px #CAFF00;
-  flex-shrink: 0;
-  animation: topbar-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 5px #CAFF00;
+  animation: tb-pulse 2s ease-in-out infinite;
+}
+@keyframes tb-pulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 5px #CAFF00; }
+  50%      { opacity: 0.5; box-shadow: 0 0 10px #CAFF00; }
 }
 
-@keyframes topbar-pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px #CAFF00; }
-  50%       { opacity: 0.55; box-shadow: 0 0 12px #CAFF00; }
-}
-
-/* $ARENA token name */
+/* $ARENA wordmark */
 .topbar__token-name {
   font-family: 'Bebas Neue', 'DM Sans', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   letter-spacing: 0.06em;
   background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  flex-shrink: 0;
 }
 
-/* Arrow CTA */
+/* Full label — hide on tiny screens, show from 380px */
+.topbar__token-label {
+  display: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 380px) {
+  .topbar__token-label { display: inline; }
+}
+
+/* Arrow */
 .topbar__arrow {
-  font-size: 0.8rem;
+  flex-shrink: 0;
+  font-size: 0.75rem;
   color: #CAFF00;
-  margin-left: 2px;
   transition: transform 0.15s;
 }
+.topbar__token-link:hover .topbar__arrow { transform: translateX(2px); }
 
-.topbar__token-link:hover .topbar__arrow {
-  transform: translateX(3px);
-}
+/* ── Offset everything below the bar ─────────────────────── */
 
-/* ── Nav offset — push nav below topbar ──────────────────── */
+/* Nav sits directly below topbar */
 .nav {
   top: var(--topbar-h) !important;
 }
 
-/* Mobile nav overlay */
+/* Mobile slide-out menu must clear both topbar + nav */
 .nav__mobile {
   top: calc(var(--topbar-h) + var(--nav-h)) !important;
 }
 
-/* ── Hero & page-wrap offset ──────────────────────────────── */
+/* Hero: mobile padding-top */
 .hero {
-  padding-top: calc(var(--topbar-h) + var(--nav-h) + 48px) !important;
+  padding-top: calc(var(--topbar-h) + var(--nav-h) + 40px) !important;
 }
-
 @media (min-width: 768px) {
   .hero {
     padding-top: calc(var(--topbar-h) + var(--nav-h) + 72px) !important;
   }
 }
 
+/* Inner pages */
 .page-wrap {
   padding-top: calc(var(--topbar-h) + var(--nav-h)) !important;
+  min-height: 100svh;
 }
