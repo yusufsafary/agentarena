@@ -1,0 +1,170 @@
+/* ============================================================
+   AgentArena — Rebrand Override
+   Palette: Neon Lime (#CAFF00) → Hot Magenta (#FF0080)
+   Font: Space Grotesk + Syne
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+
+/* ── Variable Overrides ──────────────────────────────────── */
+:root {
+  --lime:      #CAFF00;
+  --magenta:   #FF0080;
+  --blue:      #CAFF00;
+  --blue-glow: rgba(202, 255, 0, 0.15);
+  --accent:    #CAFF00;
+  --border:    rgba(202, 255, 0, 0.14);
+  --border-2:  rgba(202, 255, 0, 0.12);
+}
+
+/* ── Typography ──────────────────────────────────────────── */
+body {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1, h2, h3,
+.hero__title,
+.section__title,
+.hero__badge {
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+}
+
+/* ── Logo ────────────────────────────────────────────────── */
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav__logo-icon {
+  height: 32px;
+  width: 32px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.logo-word {
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.logo-word--accent {
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Hero Badge ──────────────────────────────────────────── */
+.hero__badge-dot {
+  background: var(--lime);
+  box-shadow: 0 0 8px var(--lime);
+}
+
+.hero__badge {
+  border-color: rgba(202, 255, 0, 0.25);
+  color: var(--lime);
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn--primary,
+.hero__cta {
+  background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
+  color: #06070A;
+  font-family: 'Syne', 'Space Grotesk', sans-serif;
+  font-weight: 800;
+}
+
+.btn--primary:hover,
+.hero__cta:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 24px rgba(202, 255, 0, 0.35);
+}
+
+.nav__cta.btn--dark {
+  border-color: rgba(202, 255, 0, 0.3);
+  color: var(--lime);
+}
+
+.nav__cta.btn--dark:hover {
+  background: rgba(202, 255, 0, 0.1);
+  border-color: var(--lime);
+}
+
+/* ── Nav Links ───────────────────────────────────────────── */
+.nav__link:hover,
+.nav__link.active {
+  background: rgba(202, 255, 0, 0.1);
+  color: var(--lime);
+}
+
+/* ── Step Numbers ────────────────────────────────────────── */
+.step__num {
+  background: rgba(202, 255, 0, 0.1);
+  border-color: rgba(202, 255, 0, 0.3);
+  color: var(--lime);
+}
+
+/* ── Prose accents ───────────────────────────────────────── */
+.prose li::before { color: var(--lime); }
+.prose a          { color: var(--lime); }
+.legal-block a    { color: var(--lime); }
+
+/* ── Section title accent line ───────────────────────────── */
+.section__eyebrow,
+.section__tag {
+  color: var(--lime);
+  border-color: rgba(202, 255, 0, 0.3);
+}
+
+/* ── Hero gradient background — neon pulse ────────────────── */
+.hero__aurora {
+  background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(202,255,0,0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 60% at 30% 60%, rgba(255,0,128,0.10) 0%, transparent 70%);
+}
+
+.hero__aurora-top {
+  background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(202,255,0,0.08) 0%, transparent 60%);
+}
+
+/* ── Feature/capability card accents ────────────────────── */
+.feat__icon,
+.cap__icon {
+  color: var(--lime);
+  background: rgba(202, 255, 0, 0.1);
+  border-color: rgba(202, 255, 0, 0.2);
+}
+
+/* ── Leaderboard / score colors ──────────────────────────── */
+.score-ai   { color: var(--lime); }
+.score-human{ color: #FF0080; }
+
+/* ── Gradient text utility ────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(90deg, #CAFF00 0%, #FF0080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scrollbar accent ─────────────────────────────────────── */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#CAFF00, #FF0080);
+}
+
+/* ── Selection ────────────────────────────────────────────── */
+::selection {
+  background: rgba(202, 255, 0, 0.25);
+  color: #ffffff;
+}
