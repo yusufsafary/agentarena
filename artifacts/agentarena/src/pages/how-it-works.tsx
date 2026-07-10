@@ -9,7 +9,7 @@ const STEPS = [
     title: "Claim Your Spot",
     color: "bg-card",
     textColor: "text-foreground",
-    content: `Every arena is a flat grid of tiles. They all start at a floor price set by the arena rules. Connect your simulated wallet, find an empty tile (or steal an owned one), click it, and pay up. It's yours now. No confirmation screens, no waiting — instant.`,
+    content: `Every arena is a flat grid of tiles. They all start at a floor price set by the arena rules. Connect your simulated wallet, find an empty tile (or steal an owned one), click it, and pay up. It's yours now. No confirmation screens, no waiting. Instant.`,
     example: null,
     tip: "Start with The Pit (10×10, 1.2x pump). Small tiles, fast action, cheap floor.",
   },
@@ -35,13 +35,13 @@ const STEPS = [
     title: "Getting Dumped (The Good Part)",
     color: "bg-primary",
     textColor: "text-primary-foreground",
-    content: `You don't hold this forever. Anyone can come along and buy your tile right out from under you at the pumped price. When they do, you lose the tile — but you get a guaranteed percentage cut of whatever they paid. You profit by being replaced. The longer you hold without getting dumped, the more expensive it becomes for the next buyer, and the bigger your eventual payout.`,
+    content: `You don't hold this forever. Anyone can come along and buy your tile right out from under you at the pumped price. When they do, you lose the tile but pocket a guaranteed percentage cut of whatever they paid. You profit by being replaced. The longer you hold without getting dumped, the more expensive it becomes for the next buyer, and the bigger your eventual payout.`,
     example: null,
     tip: "The cut percentage is fixed per arena. High Roller gives you 80% of the sale price when you're dumped.",
   },
   {
     num: "04",
-    title: "The Full Loop — By Example",
+    title: "The Full Loop: By Example",
     color: "bg-card",
     textColor: "text-foreground",
     content: `Arena: High Roller (1 SOL floor, 1.5x pump, 80% cut)`,
@@ -65,11 +65,11 @@ const FAQ = [
   },
   {
     q: "Can I lose money?",
-    a: "Not real money — no. In the simulation, you can run out of your fake starting balance if you keep buying tiles that never get dumped (i.e., you're always the last holder). That's the risk the game simulates.",
+    a: "Not real money, no. In the simulation, you can run out of your fake starting balance if you keep buying tiles that never get dumped (you're always the last holder). That's the risk the game simulates.",
   },
   {
     q: "What happens if no one ever buys my tile?",
-    a: "In the simulation, AI bots make random purchases every few seconds, so tiles do get traded. In a real on-chain version, the risk is that you're the last bag holder — which is exactly what the Simulator page helps you think through.",
+    a: "In the simulation, AI bots make random purchases every few seconds, so tiles do get traded. In a real on-chain version, the risk is that you're the last bag holder. That's exactly what the Simulator page helps you think through.",
   },
   {
     q: "Why would anyone ever buy an expensive tile?",
@@ -81,7 +81,7 @@ const FAQ = [
   },
   {
     q: "How do I maximize profit?",
-    a: "Use the Simulator page. Tinker with multiplier and cut settings to understand the math before playing. Early entry and high cut arenas favor quick profits. The key insight: ROI per dump is always fixed by the multiplier × cut — it's the absolute payout that grows over time.",
+    a: "Use the Simulator page. Tinker with multiplier and cut settings to understand the math before playing. Early entry and high cut arenas favor quick profits. Key insight: ROI per dump is always fixed by the multiplier times cut. What grows over time is the absolute payout size.",
   },
 ];
 

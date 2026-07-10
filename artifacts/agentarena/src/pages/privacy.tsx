@@ -4,7 +4,7 @@ const SECTIONS = [
   {
     title: "What We Collect",
     icon: "📦",
-    content: `Almost nothing. We store your simulated game state in your browser's localStorage — that includes your mocked wallet session (a randomly generated fake public key), your fake SOL balance, owned tile state, and recent activity. This data never leaves your device. We have no backend database, no user accounts, and no cloud storage.`,
+    content: `Almost nothing. We store your simulated game state in your browser's localStorage. That includes your wallet session key (either your real Solana pubkey if you connected Phantom or Solflare, or a randomly generated one in simulated mode), your fake game SOL balance, owned tile state, and recent activity. This data never leaves your device. We have no backend database, no user accounts, and no cloud storage.`,
   },
   {
     title: "What We Don't Collect",
@@ -14,12 +14,12 @@ const SECTIONS = [
   {
     title: "Real Wallet Connections",
     icon: "🔐",
-    content: `When you use the wallet connect feature, AgentArena does not actually connect to Phantom, Solflare, or any other real wallet extension. The "connection" is entirely simulated — a random session key is generated and stored locally. We will never request signing permissions, never prompt a real transaction, and never access your actual wallet in any way.`,
+    content: `If you choose "Simulate Connection," a random public key is generated in your browser and no real wallet is involved. If you choose Phantom or Solflare, the app requests your Solana address from the wallet extension and fetches your devnet SOL balance as a read-only reference. We never request signing permissions, never prompt a transaction, and never submit anything on-chain on your behalf. The game balance is always separate from your real on-chain balance.`,
   },
   {
     title: "Local Storage",
     icon: "💾",
-    content: `All game state is written to localStorage under keys prefixed with agentarena_. You can inspect this at any time in your browser's DevTools → Application → Local Storage. You can delete it there, or by clicking "Clear Storage" in your browser settings for this site. Clearing localStorage resets your simulated game state entirely.`,
+    content: `All game state is written to localStorage under keys prefixed with agentarena_. You can inspect this at any time in your browser's DevTools, under Application then Local Storage. You can delete it there, or by clearing site data in your browser settings. Clearing localStorage resets your simulated game state entirely.`,
     code: `Keys: agentarena_wallet, agentarena_tiles, agentarena_boards, agentarena_activity`,
   },
   {
@@ -50,7 +50,7 @@ export default function Privacy() {
       <div>
         <h1 className="text-4xl font-bold uppercase tracking-tighter mb-2">Privacy Policy</h1>
         <p className="font-mono text-sm text-muted-foreground">
-          Effective: July 2025. Short version: we barely collect anything. Longer version below.
+          Effective: July 2026. Short version: we barely collect anything. Longer version below.
         </p>
       </div>
 

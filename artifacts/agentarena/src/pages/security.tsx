@@ -6,13 +6,13 @@ const POINTS = [
     title: "No Smart Contract",
     badge: "VERIFIED",
     badgeColor: "bg-primary text-primary-foreground",
-    content: `There is no smart contract to audit. AgentArena is a purely client-side simulation. All game logic — price calculations, payout math, tile ownership — runs in your browser as JavaScript. You can read every line in DevTools → Sources if you want.`,
+    content: `There is no smart contract to audit. AgentArena is a purely client-side simulation. All game logic (price calculations, payout math, tile ownership) runs in your browser as JavaScript. You can read every line in DevTools under Sources if you want.`,
   },
   {
     title: "No Real Wallet Permissions",
     badge: "SAFE",
     badgeColor: "bg-primary text-primary-foreground",
-    content: `We never request signing permissions from any wallet extension. The "connect wallet" flow creates a simulated session key. We do not pop up Phantom, Solflare, or any other wallet adapter for real signatures. If you ever see a wallet popup asking to sign a transaction from agentarena.id — that is not us and you should leave immediately.`,
+    content: `We never request signing permissions from any wallet extension. When you connect Phantom or Solflare, we only request your public address and read your devnet balance. No transaction signing, no message signing. If you ever see a wallet popup asking to sign a transaction from agentarena.id, that is not us and you should close it immediately.`,
   },
   {
     title: "No Seed Phrases, Ever",

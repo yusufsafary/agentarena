@@ -143,7 +143,7 @@ export default function BoardView() {
                     isSelected && "ring-2 ring-accent ring-offset-1 ring-offset-background z-10 scale-110 shadow-lg",
                     isOwnedByMe && "ring-1 ring-primary/50",
                   )}
-                  title={`[${tile.x},${tile.y}] — ${formatSol(tile.price)} — ${tile.purchaseCount} purchases`}
+                  title={`[${tile.x},${tile.y}] | ${formatSol(tile.price)} | ${tile.purchaseCount} purchases`}
                 >
                   {tile.purchaseCount > 0 && board.size <= 15 && (
                     <span className="absolute bottom-0 right-0.5 text-[8px] font-mono font-bold text-white/90 drop-shadow-md leading-none">

@@ -275,7 +275,7 @@ export default function Landing() {
       {/* Risk Disclaimer */}
       <div className="w-full max-w-5xl px-4 pb-8">
         <div className="p-4 border-2 border-border bg-muted font-mono text-xs text-muted-foreground text-center">
-          <span className="font-bold uppercase text-foreground">SIMULATION ONLY</span> — No real assets. No real wallets. No real transactions. This is a game. Play stupid games, win stupid prizes.
+          <span className="font-bold uppercase text-foreground">SIMULATION ONLY.</span> No real assets. No real wallets. No real transactions. This is a game. Play stupid games, win stupid prizes.
         </div>
       </div>
 

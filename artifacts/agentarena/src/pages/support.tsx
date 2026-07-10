@@ -10,7 +10,7 @@ const QUICK_ANSWERS = [
   },
   {
     q: "My balance is stuck at zero.",
-    a: "Your simulated wallet gives you 50 SOL on connect. If you've spent it all, disconnect and reconnect — you get a fresh 50 SOL. It's fake money.",
+    a: "Your simulated wallet gives you 50 SOL on connect. If you've spent it all, disconnect and reconnect to get a fresh 50 SOL. It's fake money.",
   },
   {
     q: "The game looks frozen / nothing is moving.",
@@ -119,7 +119,7 @@ export default function Support() {
               {/* Email */}
               <div className="space-y-2">
                 <label className="text-xs uppercase font-bold text-foreground block">
-                  Email <span className="font-normal text-muted-foreground">(optional — for follow-up)</span>
+                  Email <span className="font-normal text-muted-foreground">(optional, for follow-up)</span>
                 </label>
                 <input
                   type="email"

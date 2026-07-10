@@ -8,6 +8,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGame } from "@/lib/store";
+import { WalletConnect } from "@/components/wallet-connect";
 
 const PRESET_SCENARIOS = [
   { label: "The Pit", basePrice: 0.1, growthFactor: 1.2, cutPercentage: 0.5, purchases: 12 },
@@ -99,7 +101,29 @@ function buildTimeline(basePrice: number, growthFactor: number, cutPercentage: n
   return { data, myBuyPrice, myYield, netProfit, roi };
 }
 
+function WalletGate() {
+  return (
+    <div className="max-w-md mx-auto py-24 text-center space-y-6">
+      <div className="inline-block px-3 py-1 bg-destructive text-destructive-foreground font-mono text-xs font-bold uppercase border-2 border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        Locked
+      </div>
+      <h1 className="text-4xl font-bold uppercase tracking-tighter">Connect First.</h1>
+      <p className="font-mono text-muted-foreground text-sm leading-relaxed">
+        The simulator is for players. Connect a wallet to get 50 devnet SOL and start running scenarios.
+        Real Phantom or Solflare connects to devnet. No real funds move.
+      </p>
+      <div className="flex justify-center pt-2">
+        <WalletConnect />
+      </div>
+      <p className="text-xs font-mono text-muted-foreground">
+        No wallet extension? Use "Simulate Connection" to get a random address and play anyway.
+      </p>
+    </div>
+  );
+}
+
 export default function Simulator() {
+  const { wallet } = useGame();
   const [basePrice, setBasePrice] = useState(1);
   const [growthFactor, setGrowthFactor] = useState(1.2);
   const [cutPercentage, setCutPercentage] = useState(0.5);
@@ -244,6 +268,8 @@ export default function Simulator() {
       setTimeout(() => setCopied(false), 2000);
     });
   };
+
+  if (!wallet.connected) return <WalletGate />;
 
   const isProfit = simData.netProfit > 0;
 
@@ -425,7 +451,7 @@ export default function Simulator() {
                 At <span className="text-foreground font-bold">{(cutPercentage * 100).toFixed(0)}% cut</span>, you break even when the buyer pays at least{" "}
                 <span className="text-foreground font-bold">{(1 / cutPercentage).toFixed(2)}x</span> your entry. With{" "}
                 <span className="text-foreground font-bold">{growthFactor}x</span> pump, your multiplier x cut ={" "}
-                <span className="text-foreground font-bold">{(growthFactor * cutPercentage).toFixed(3)}</span> —{" "}
+                <span className="text-foreground font-bold">{(growthFactor * cutPercentage).toFixed(3)}</span>.{" "}
                 {growthFactor * cutPercentage > 1
                   ? <span className="text-primary font-bold">profitable (dump on very next turn)</span>
                   : <span className="text-destructive font-bold">loss (need to hold longer or higher-cut arena)</span>
@@ -439,7 +465,7 @@ export default function Simulator() {
             <Card className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <CardHeader className="pb-2 bg-muted border-b-2 border-border">
                 <CardTitle className="text-sm uppercase font-mono">Price Growth Over Time</CardTitle>
-                <CardDescription className="font-mono text-xs">Exponential pump — every purchase inflates the bag.</CardDescription>
+                <CardDescription className="font-mono text-xs">Exponential pump. Every purchase inflates the bag.</CardDescription>
               </CardHeader>
               <CardContent className="pt-4">
                 <ResponsiveContainer width="100%" height={200}>
@@ -810,12 +836,12 @@ export default function Simulator() {
               )}
             </div>
 
-            {/* Replay chart — grows as turns play out */}
+            {/* Replay chart: grows as turns play out */}
             <div className="lg:col-span-8 space-y-4">
               <Card className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                 <CardHeader className="pb-2 bg-muted border-b-2 border-border">
                   <CardTitle className="text-sm uppercase font-mono">
-                    Price Curve — Turn {replayTurn} / {purchases}
+                    Price Curve: Turn {replayTurn} / {purchases}
                   </CardTitle>
                   <CardDescription className="font-mono text-xs">
                     Chart fills as each turn plays. Dashed = future price.

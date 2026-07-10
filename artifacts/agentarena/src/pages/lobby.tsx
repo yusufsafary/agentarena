@@ -134,7 +134,7 @@ export default function Lobby() {
                         </span>
                       )}
                     </CardTitle>
-                    <p className="font-mono text-xs text-muted-foreground mt-1">{board.size}×{board.size} Grid — {boardTiles.length} tiles</p>
+                    <p className="font-mono text-xs text-muted-foreground mt-1">{board.size}×{board.size} Grid, {boardTiles.length} tiles</p>
                   </div>
                   <MiniGrid boardId={board.id} size={board.size} tiles={tiles} />
                 </div>

@@ -9,27 +9,27 @@ const SECTIONS = [
   {
     num: "2",
     title: "No Financial Advice",
-    content: `Nothing on this platform constitutes financial advice, investment advice, or trading recommendations of any kind. The game mechanics are designed to illustrate how a class of speculative on-chain games work — not to guide real-world financial decisions. If you use this simulator to make real-money trading decisions elsewhere, that is entirely your choice and your responsibility.`,
+    content: `Nothing on this platform constitutes financial advice, investment advice, or trading recommendations of any kind. The game mechanics are designed to illustrate how a class of speculative on-chain games work, not to guide real-world financial decisions. If you use this simulator to make real-money trading decisions elsewhere, that is entirely your choice and your responsibility.`,
   },
   {
     num: "3",
     title: "No Real Asset Transfers",
-    content: `When you "connect a wallet" on AgentArena, the app generates a random simulated public key for your session. It does not interact with any real wallet software, browser extension, hardware wallet, or blockchain node. No real funds are ever requested, transferred, or held by this platform.`,
+    content: `Choosing "Simulate Connection" generates a random public key locally with no wallet involved. Choosing Phantom or Solflare requests your public address from the extension and reads your devnet SOL balance for display. No real funds are requested, transferred, or held by this platform at any point. The game balance is purely simulated.`,
   },
   {
     num: "4",
     title: "No Liability",
-    content: `To the maximum extent permitted by law, the operators of AgentArena.id accept no liability for any damages arising from use of this platform — including but not limited to decisions made based on game outcomes, lost productivity, or FOMO-induced real-world trading. This is a game. Treat it like one.`,
+    content: `To the maximum extent permitted by law, the operators of AgentArena.id accept no liability for any damages arising from use of this platform, including decisions made based on game outcomes, lost productivity, or FOMO-induced real-world trading. This is a game. Treat it like one.`,
   },
   {
     num: "5",
     title: "Fair Use and Conduct",
-    content: `Since all game state is stored locally, you can technically modify your localStorage to cheat (inflate your balance, etc.). This is allowed — it defeats the point, but it's harmless to everyone else because there are no shared servers. Do not attempt to scrape, abuse, or disrupt the hosting infrastructure for this site.`,
+    content: `Since all game state is stored locally, you can technically modify your localStorage to cheat (inflate your balance, etc.). This is allowed. It defeats the point, but it's harmless to everyone else because there are no shared servers. Do not attempt to scrape, abuse, or disrupt the hosting infrastructure for this site.`,
   },
   {
     num: "6",
     title: "Changes to These Terms",
-    content: `We may update these terms at any time. Continued use of the platform after changes are posted constitutes acceptance of the updated terms. Since there's no account system, we can't notify you directly — check this page periodically if you care.`,
+    content: `We may update these terms at any time. Continued use of the platform after changes are posted constitutes acceptance of the updated terms. Since there's no account system, we can't notify you directly. Check this page periodically if you care.`,
   },
   {
     num: "7",
@@ -44,7 +44,7 @@ export default function Terms() {
       <div>
         <h1 className="text-4xl font-bold uppercase tracking-tighter mb-2">Terms of Service</h1>
         <p className="font-mono text-sm text-muted-foreground">
-          Effective: July 2025. Jurisdiction: Simulation Land. Governing law: The Math.
+          Effective: July 2026. Jurisdiction: Simulation Land. Governing law: The Math.
         </p>
       </div>
 
