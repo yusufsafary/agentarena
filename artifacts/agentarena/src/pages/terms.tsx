@@ -1,38 +1,76 @@
+import { Link } from "wouter";
+
+const SECTIONS = [
+  {
+    num: "1",
+    title: "This is a Simulation",
+    content: `AgentArena is a browser-based game and educational simulator. There are no real smart contracts, no real blockchain transactions, no real tokens, and no real value changing hands at any point. Every SOL balance you see is fictional. Every wallet connection is mocked. Everything runs entirely within your browser using localStorage. Nothing leaves your device.`,
+  },
+  {
+    num: "2",
+    title: "No Financial Advice",
+    content: `Nothing on this platform constitutes financial advice, investment advice, or trading recommendations of any kind. The game mechanics are designed to illustrate how a class of speculative on-chain games work — not to guide real-world financial decisions. If you use this simulator to make real-money trading decisions elsewhere, that is entirely your choice and your responsibility.`,
+  },
+  {
+    num: "3",
+    title: "No Real Asset Transfers",
+    content: `When you "connect a wallet" on AgentArena, the app generates a random simulated public key for your session. It does not interact with any real wallet software, browser extension, hardware wallet, or blockchain node. No real funds are ever requested, transferred, or held by this platform.`,
+  },
+  {
+    num: "4",
+    title: "No Liability",
+    content: `To the maximum extent permitted by law, the operators of AgentArena.id accept no liability for any damages arising from use of this platform — including but not limited to decisions made based on game outcomes, lost productivity, or FOMO-induced real-world trading. This is a game. Treat it like one.`,
+  },
+  {
+    num: "5",
+    title: "Fair Use and Conduct",
+    content: `Since all game state is stored locally, you can technically modify your localStorage to cheat (inflate your balance, etc.). This is allowed — it defeats the point, but it's harmless to everyone else because there are no shared servers. Do not attempt to scrape, abuse, or disrupt the hosting infrastructure for this site.`,
+  },
+  {
+    num: "6",
+    title: "Changes to These Terms",
+    content: `We may update these terms at any time. Continued use of the platform after changes are posted constitutes acceptance of the updated terms. Since there's no account system, we can't notify you directly — check this page periodically if you care.`,
+  },
+  {
+    num: "7",
+    title: "Contact",
+    content: `Questions about these terms? Use the Support page. We'll read it.`,
+  },
+];
+
 export default function Terms() {
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-12">
-      <h1 className="text-4xl font-bold uppercase tracking-tighter">Terms of Service</h1>
-      
-      <div className="p-8 border-2 border-border bg-card shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-6 font-mono text-sm leading-relaxed">
-        <p className="font-bold text-lg text-primary uppercase">Read this carefully. It takes ten seconds.</p>
-        
-        <div className="space-y-2">
-          <h2 className="font-bold uppercase text-foreground">1. This is a Simulation</h2>
-          <p className="text-muted-foreground">
-            AgentArena is a simulated environment. There are no real smart contracts, no real tokens, and no real value changing hands here. Everything you see runs locally in your browser.
-          </p>
-        </div>
+    <div className="max-w-3xl mx-auto space-y-8 pb-16">
+      <div>
+        <h1 className="text-4xl font-bold uppercase tracking-tighter mb-2">Terms of Service</h1>
+        <p className="font-mono text-sm text-muted-foreground">
+          Effective: July 2025. Jurisdiction: Simulation Land. Governing law: The Math.
+        </p>
+      </div>
 
-        <div className="space-y-2">
-          <h2 className="font-bold uppercase text-foreground">2. No Financial Advice</h2>
-          <p className="text-muted-foreground">
-            Nothing on this site constitutes financial advice. We are literally giving you fake money to buy fake tiles. Do not use this simulator to make real-world trading decisions.
-          </p>
-        </div>
+      <div className="p-4 border-2 border-primary bg-primary/10 font-mono text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        <span className="font-bold uppercase text-primary">TLDR: </span>
+        This is a simulator. Fake money. No real value. No liability. Play fair. Don't break stuff. Use the{" "}
+        <Link href="/simulator" className="text-primary font-bold hover:underline">Simulator</Link>{" "}to learn the math.
+      </div>
 
-        <div className="space-y-2">
-          <h2 className="font-bold uppercase text-foreground">3. No Liability</h2>
-          <p className="text-muted-foreground">
-            We hold no liability for anything you do here or anywhere else. If you lose your actual money somewhere else because you got overconfident playing a simulator, that is entirely on you.
-          </p>
-        </div>
+      <div className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] divide-y-2 divide-border">
+        {SECTIONS.map(section => (
+          <div key={section.num} className="p-6 space-y-2">
+            <h2 className="font-bold uppercase text-foreground font-mono">
+              {section.num}. {section.title}
+            </h2>
+            <p className="font-mono text-sm text-muted-foreground leading-relaxed">
+              {section.content}
+            </p>
+          </div>
+        ))}
+      </div>
 
-        <div className="space-y-2">
-          <h2 className="font-bold uppercase text-foreground">4. Play Fair</h2>
-          <p className="text-muted-foreground">
-            It's a local simulator, so if you really want to pop open dev tools and edit your localStorage balance to a billion fake SOL, go ahead. We don't care. But it defeats the point.
-          </p>
-        </div>
+      <div className="flex gap-4 flex-wrap font-mono text-xs text-muted-foreground border-t-2 border-border pt-4">
+        <Link href="/privacy" className="hover:text-foreground hover:underline underline-offset-4 transition-colors">Privacy Policy</Link>
+        <Link href="/security" className="hover:text-foreground hover:underline underline-offset-4 transition-colors">Security</Link>
+        <Link href="/support" className="hover:text-foreground hover:underline underline-offset-4 transition-colors">Support</Link>
       </div>
     </div>
   );
