@@ -50,6 +50,11 @@ const EMPTY_WALLET: WalletState = {
   isReal: false,
 };
 
+// Discriminated union so real connections can't accidentally pass provider: null
+type ConnectSimulated = { kind: 'simulated' };
+type ConnectReal = { kind: 'real'; provider: WalletProviderId };
+type ConnectArgs = ConnectSimulated | ConnectReal;
+
 type GameContextType = {
   wallet: WalletState;
   connectWallet: (provider: WalletState['provider'], isReal: boolean) => Promise<void>;
@@ -62,6 +67,26 @@ type GameContextType = {
 };
 
 const GameContext = createContext<GameContextType | null>(null);
+
+const STARTING_BALANCE = 50 * 1e9; // 50 simulated SOL in lamports
+
+function addUserIfMissing(
+  prev: User[],
+  pubkey: string,
+  balance: number,
+  seed?: string
+): User[] {
+  if (prev.find(u => u.id === pubkey)) return prev;
+  return [
+    ...prev,
+    {
+      id: pubkey,
+      name: 'You',
+      balance,
+      avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${seed ?? 'you'}`,
+    },
+  ];
+}
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [wallet, setWallet] = useState<WalletState>(EMPTY_WALLET);
@@ -84,80 +109,67 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       const savedWallet = localStorage.getItem('agentarena_wallet');
       if (savedWallet) {
         const parsed = JSON.parse(savedWallet) as WalletState;
-        // Don't restore "real" wallet connections on page load — user must reconnect
+        // Don't restore real wallet connections on page load — user must reconnect explicitly
         if (parsed.connected && !parsed.isReal) {
           initialWallet = parsed;
           setWallet(initialWallet);
         }
       }
-    } catch (e) {
-      // fallback
+    } catch {
+      // fallback to empty wallet
     }
 
     if (initialWallet.connected && initialWallet.pubkey) {
-      setUsers(prev => {
-        if (!prev.find(u => u.id === initialWallet.pubkey)) {
-          return [...prev, {
-            id: initialWallet.pubkey!,
-            name: 'You',
-            balance: initialWallet.balance,
-            avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you`,
-          }];
-        }
-        return prev;
-      });
+      setUsers(prev => addUserIfMissing(prev, initialWallet.pubkey!, initialWallet.balance));
     }
 
     try {
       const savedTiles = localStorage.getItem('agentarena_tiles');
-      if (savedTiles) {
-        setTiles(JSON.parse(savedTiles));
-      } else {
-        setTiles(initTiles(INITIAL_BOARDS));
-      }
-    } catch (e) {
+      setTiles(savedTiles ? JSON.parse(savedTiles) : initTiles(INITIAL_BOARDS));
+    } catch {
       setTiles(initTiles(INITIAL_BOARDS));
     }
 
     try {
       const savedBoards = localStorage.getItem('agentarena_boards');
-      if (savedBoards) {
-        setBoards(JSON.parse(savedBoards));
-      }
-    } catch (e) {
-      // fallback
-    }
+      if (savedBoards) setBoards(JSON.parse(savedBoards));
+    } catch { /* fallback */ }
 
     try {
       const savedActivity = localStorage.getItem('agentarena_activity');
-      if (savedActivity) {
-        setActivity(JSON.parse(savedActivity));
-      }
-    } catch (e) {
-      // fallback
-    }
+      if (savedActivity) setActivity(JSON.parse(savedActivity));
+    } catch { /* fallback */ }
   }, []);
 
-  // Save to local storage on change (only simulated wallets)
+  // Persist to local storage on change (only for simulated wallets)
   useEffect(() => {
-    if (tiles.length > 0) {
-      localStorage.setItem('agentarena_tiles', JSON.stringify(tiles));
-      localStorage.setItem('agentarena_boards', JSON.stringify(boards));
-      localStorage.setItem('agentarena_activity', JSON.stringify(activity.slice(0, 100)));
-      if (!wallet.isReal) {
-        localStorage.setItem('agentarena_wallet', JSON.stringify(wallet));
-      }
+    if (tiles.length === 0) return;
+    localStorage.setItem('agentarena_tiles', JSON.stringify(tiles));
+    localStorage.setItem('agentarena_boards', JSON.stringify(boards));
+    localStorage.setItem('agentarena_activity', JSON.stringify(activity.slice(0, 100)));
+    if (!wallet.isReal) {
+      localStorage.setItem('agentarena_wallet', JSON.stringify(wallet));
     }
   }, [tiles, boards, activity, wallet]);
+
+  // Internal helper to resolve connect args cleanly
+  const resolveConnectArgs = (
+    provider: WalletState['provider'],
+    isReal: boolean
+  ): ConnectArgs => {
+    if (!isReal || provider === 'simulated' || provider === null) {
+      return { kind: 'simulated' };
+    }
+    return { kind: 'real', provider: provider as WalletProviderId };
+  };
 
   const connectWallet = useCallback(async (
     provider: WalletState['provider'],
     isReal: boolean
   ) => {
-    const STARTING_BALANCE = 50 * 1e9; // 50 simulated SOL
+    const args = resolveConnectArgs(provider, isReal);
 
-    if (!isReal || provider === 'simulated') {
-      // Pure simulation mode — random pubkey, no wallet extension needed
+    if (args.kind === 'simulated') {
       const pubkey = generateSimulatedPubkey();
       const newWallet: WalletState = {
         connected: true,
@@ -168,17 +180,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         devnetBalance: 0,
       };
       setWallet(newWallet);
-      setUsers(prev => {
-        if (!prev.find(u => u.id === pubkey)) {
-          return [...prev, {
-            id: pubkey,
-            name: 'You',
-            balance: STARTING_BALANCE,
-            avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you`,
-          }];
-        }
-        return prev;
-      });
+      setUsers(prev => addUserIfMissing(prev, pubkey, STARTING_BALANCE));
       toast.success('Simulated wallet connected', {
         description: 'You have 50 SOL to play with. None of this is real.',
       });
@@ -186,10 +188,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Real wallet connection via devnet
-    const result = await connectSolanaWallet(provider as WalletProviderId);
+    const result = await connectSolanaWallet(args.provider);
 
-    if (!result) {
-      // Wallet not installed or user rejected — fall back to simulation
+    if (!result.ok) {
+      // Wallet not installed or user rejected — fall back to simulation with accurate message
       const pubkey = generateSimulatedPubkey();
       const newWallet: WalletState = {
         connected: true,
@@ -200,15 +202,21 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         devnetBalance: 0,
       };
       setWallet(newWallet);
-      setUsers(prev => {
-        if (!prev.find(u => u.id === pubkey)) {
-          return [...prev, { id: pubkey, name: 'You', balance: STARTING_BALANCE, avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you` }];
-        }
-        return prev;
-      });
-      toast.info(`${provider} not detected`, {
-        description: 'Running in simulated mode. Install the wallet extension for devnet connection.',
-      });
+      setUsers(prev => addUserIfMissing(prev, pubkey, STARTING_BALANCE));
+
+      if (result.reason === 'not_installed') {
+        toast.info(`${provider} not detected`, {
+          description: 'Running in simulated mode. Install the wallet extension to connect on devnet.',
+        });
+      } else if (result.reason === 'rejected') {
+        toast.warning('Connection cancelled', {
+          description: 'You rejected the wallet request. Running in simulated mode instead.',
+        });
+      } else {
+        toast.info('Could not connect wallet', {
+          description: 'Running in simulated mode.',
+        });
+      }
       return;
     }
 
@@ -222,20 +230,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     };
 
     setWallet(newWallet);
-    setUsers(prev => {
-      if (!prev.find(u => u.id === result.pubkey)) {
-        return [...prev, {
-          id: result.pubkey,
-          name: 'You',
-          balance: STARTING_BALANCE,
-          avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${result.pubkey}`,
-        }];
-      }
-      return prev;
-    });
+    setUsers(prev => addUserIfMissing(prev, result.pubkey, STARTING_BALANCE, result.pubkey));
 
     toast.success(`${provider} connected on Devnet`, {
-      description: `Address: ${result.pubkey.slice(0, 6)}...${result.pubkey.slice(-6)}. Game balance is separate from your on-chain SOL.`,
+      description: `${result.pubkey.slice(0, 6)}...${result.pubkey.slice(-6)} // Game balance is separate from on-chain SOL.`,
     });
   }, []);
 
@@ -328,8 +326,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Simulation Loop — mock agents keep buying tiles
-  const simRef = useRef<NodeJS.Timeout | null>(null);
+  // Simulation loop — mock agents keep buying tiles so the arena stays alive
+  const simRef = useRef<ReturnType<typeof setInterval> | null>(null);
   useEffect(() => {
     simRef.current = setInterval(() => {
       if (Math.random() > 0.3 && tiles.length > 0) {
