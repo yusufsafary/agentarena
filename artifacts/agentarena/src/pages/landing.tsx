@@ -70,7 +70,7 @@ function LiveTicker() {
 }
 
 function AnimatedGrid() {
-  const { tiles, boards } = useGame();
+  const { tiles } = useGame();
   const displayTiles = tiles.filter(t => t.boardId === 'b1').slice(0, 64);
   const [tick, setTick] = useState(0);
 

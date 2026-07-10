@@ -116,8 +116,8 @@ export default function BoardView() {
         {/* Legend */}
         <div className="flex gap-3 px-3 py-1.5 border-b border-border/50 bg-background text-[10px] font-mono flex-wrap">
           <span className="flex items-center gap-1"><span className="w-3 h-3 border bg-primary inline-block" />You</span>
-          <span className="flex items-center gap-1"><span className="w-3 h-3 border bg-secondary/50 inline-block" />Others</span>
-          <span className="flex items-center gap-1"><span className="w-3 h-3 border bg-destructive/70 inline-block" />Hot tile (3+ buys)</span>
+          <span className="flex items-center gap-1"><span className="w-3 h-3 border bg-secondary/50 inline-block" />Others (2+ buys)</span>
+          <span className="flex items-center gap-1"><span className="w-3 h-3 border bg-destructive/70 inline-block" />Hot tile (4+ buys)</span>
           <span className="flex items-center gap-1"><span className="w-3 h-3 border border-border/40 bg-background inline-block" />Empty</span>
         </div>
 

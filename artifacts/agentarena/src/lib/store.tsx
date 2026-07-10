@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { Board, Tile, User, Activity, WalletState } from './types';
 import { generateId, calculatePayout } from './utils';
+import { toast } from 'sonner';
 
 const INITIAL_BOARDS: Board[] = [
   { id: 'b1', name: 'The Pit', size: 10, basePrice: 1e8, growthFactor: 1.2, cutPercentage: 0.5, totalVolume: 0 },
@@ -60,6 +61,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [tiles, setTiles] = useState<Tile[]>([]);
   const [activity, setActivity] = useState<Activity[]>([]);
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
+
+  // Refs so processPurchase always reads fresh state without stale closures
+  const boardsRef = useRef<Board[]>(INITIAL_BOARDS);
+  const walletRef = useRef<WalletState>({ connected: false, pubkey: null, balance: 0, provider: null });
+  useEffect(() => { boardsRef.current = boards; }, [boards]);
+  useEffect(() => { walletRef.current = wallet; }, [wallet]);
 
   // Initialize from local storage or defaults
   useEffect(() => {
@@ -163,9 +170,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setTiles(prevTiles => {
       const tileIndex = prevTiles.findIndex(t => t.id === tileId);
       if (tileIndex === -1) return prevTiles;
-      
+
       const tile = prevTiles[tileIndex];
-      const board = boards.find(b => b.id === tile.boardId);
+      // Use ref to always read fresh board data, avoiding stale closure bugs
+      const board = boardsRef.current.find(b => b.id === tile.boardId);
       if (!board) return prevTiles;
 
       const newTiles = [...prevTiles];
@@ -190,12 +198,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         timestamp: Date.now(),
       }, ...prev].slice(0, 500));
 
-      // Update Board Volume
-      setBoards(prevBoards => prevBoards.map(b => 
+      // Update Board Volume (functional update — always fresh)
+      setBoards(prevBoards => prevBoards.map(b =>
         b.id === board.id ? { ...b, totalVolume: b.totalVolume + pricePaid } : b
       ));
 
-      // Update Balances
+      // Update User Balances (functional update — always fresh)
       setUsers(prevUsers => prevUsers.map(u => {
         if (u.id === buyerId) return { ...u, balance: u.balance - pricePaid };
         if (u.id === previousOwnerId) {
@@ -205,40 +213,50 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         return u;
       }));
 
-      if (wallet.connected && buyerId === wallet.pubkey) {
+      // Update player wallet balance via ref to avoid stale wallet closure
+      const currentWallet = walletRef.current;
+      if (currentWallet.connected && buyerId === currentWallet.pubkey) {
         setWallet(w => ({ ...w, balance: w.balance - pricePaid }));
       }
-      if (wallet.connected && previousOwnerId === wallet.pubkey) {
+      if (currentWallet.connected && previousOwnerId === currentWallet.pubkey) {
         const cut = calculatePayout(pricePaid, board.cutPercentage);
         setWallet(w => ({ ...w, balance: w.balance + cut }));
       }
 
       return newTiles;
     });
-  }, [boards, wallet]);
+  }, []); // no stale closure deps — reads boards/wallet via refs
 
   const buyTile = (tileId: string) => {
-    if (!wallet.connected || !wallet.pubkey) return;
-    
+    if (!wallet.connected || !wallet.pubkey) {
+      toast.error("Connect your wallet first.");
+      return;
+    }
+
     const tile = tiles.find(t => t.id === tileId);
     if (!tile) return;
     if (wallet.balance < tile.price) {
-      alert("Insufficient funds!");
+      toast.error("Insufficient funds!", {
+        description: `Need ${(tile.price / 1e9).toFixed(3)} SOL, you have ${(wallet.balance / 1e9).toFixed(3)} SOL.`,
+      });
       return;
     }
     if (tile.ownerId === wallet.pubkey) {
-      alert("You already own this tile!");
+      toast.warning("You already own this tile!");
       return;
     }
 
     processPurchase(tileId, wallet.pubkey);
+    toast.success("Tile purchased!", {
+      description: `Paid ${(tile.price / 1e9).toFixed(3)} SOL. Waiting for the next buyer...`,
+    });
   };
 
   // Simulation Loop
   const simRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     simRef.current = setInterval(() => {
-      // 30% chance every 2 seconds to simulate a buy
+      // ~70% chance every 2 seconds — keeps the arena active
       if (Math.random() > 0.3 && tiles.length > 0) {
         const randomBoard = boards[Math.floor(Math.random() * boards.length)];
         const boardTiles = tiles.filter(t => t.boardId === randomBoard.id);
