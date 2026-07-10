@@ -24,3 +24,9 @@ id = "fWiSqR3ueWyRLX3_taxzw"
 uri = "file://attached_assets/generated_images/agentarena_product_3_wallet.jpg"
 type = "image"
 title = "Product image 3 — Connect and play"
+
+[[outputs]]
+id = "4tsjuiWeKIK_JyqnuDRHp"
+uri = "file://attached_assets/generated_images/agentarena_x_cover_1500x500_final.jpg"
+type = "image"
+title = "AgentArena.id — X cover banner (1500×500)"
