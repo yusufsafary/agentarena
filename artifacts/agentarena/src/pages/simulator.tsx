@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { formatSol, calculatePayout } from "@/lib/utils";
 
 export default function Simulator() {
@@ -12,7 +11,6 @@ export default function Simulator() {
   const simData = useMemo(() => {
     let currentPrice = basePrice * 1e9;
     let data = [];
-    let totalSpent = 0;
     let myYield = 0;
 
     // Simulate buying on turn 1
@@ -26,9 +24,9 @@ export default function Simulator() {
         // Someone buys it from you
         const payout = calculatePayout(currentPrice, cutPercentage);
         myYield = payout;
-        data.push({ turn: i, price: currentPrice, event: 'Sold (You get cut)', amount: payout });
+        data.push({ turn: i, price: currentPrice, event: 'Dumped (You get cut)', amount: payout });
       } else {
-        data.push({ turn: i, price: currentPrice, event: 'Other buys', amount: 0 });
+        data.push({ turn: i, price: currentPrice, event: 'Someone else buys', amount: 0 });
       }
       currentPrice = currentPrice * growthFactor;
     }
@@ -48,8 +46,8 @@ export default function Simulator() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-4xl font-bold uppercase tracking-tighter mb-2">Economics Simulator</h1>
-        <p className="text-muted-foreground font-mono">Test parameters before risking the real fake money.</p>
+        <h1 className="text-4xl font-bold uppercase tracking-tighter mb-2">The Sandbox</h1>
+        <p className="text-muted-foreground font-mono">Play with the math before you start throwing fake money around.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -78,7 +76,7 @@ export default function Simulator() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs uppercase font-bold text-muted-foreground block">Previous Owner Cut (0 to 1)</label>
+              <label className="text-xs uppercase font-bold text-muted-foreground block">Previous Owner Cut (0.0 to 1.0)</label>
               <input 
                 type="number" 
                 step="0.1"
@@ -105,30 +103,30 @@ export default function Simulator() {
 
         <div className="md:col-span-2 space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <Card className="bg-primary text-primary-foreground">
+            <Card className="bg-primary text-primary-foreground border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-6">
-                <div className="text-sm font-mono opacity-80 uppercase font-bold mb-1">Your ROI (If sold on turn 2)</div>
+                <div className="text-sm font-mono opacity-80 uppercase font-bold mb-1">Your ROI (Dumped on turn 2)</div>
                 <div className="text-4xl font-bold">{simData.roi.toFixed(1)}%</div>
                 <div className="text-sm font-mono mt-2 font-bold">
                   {simData.netProfit > 0 ? '+' : ''}{formatSol(simData.netProfit)} Profit
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-accent text-accent-foreground">
+            <Card className="bg-accent text-accent-foreground border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <CardContent className="p-6">
-                <div className="text-sm font-mono opacity-80 uppercase font-bold mb-1">Price After {purchases} Buys</div>
+                <div className="text-sm font-mono opacity-80 uppercase font-bold mb-1">Bag Size After {purchases} Buys</div>
                 <div className="text-4xl font-bold">{formatSol(simData.data[simData.data.length-1].price)}</div>
               </CardContent>
             </Card>
           </div>
 
-          <Card>
+          <Card className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <CardHeader>
               <CardTitle>Timeline</CardTitle>
-              <CardDescription>Assuming you buy on Turn 1 and get bought out on Turn 2.</CardDescription>
+              <CardDescription>Assuming you buy the first round and get dumped on the second.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 font-mono text-sm h-64 overflow-auto">
+              <div className="space-y-2 font-mono text-sm h-64 overflow-auto border border-border">
                 {simData.data.map(row => (
                   <div key={row.turn} className={`flex justify-between items-center p-2 border-b border-border/20 ${row.turn === 1 ? 'bg-primary/10 text-primary font-bold' : row.turn === 2 ? 'bg-accent/10 text-accent-foreground font-bold' : ''}`}>
                     <div className="flex gap-4 w-1/2">

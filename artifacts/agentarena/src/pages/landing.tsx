@@ -13,7 +13,7 @@ export default function Landing() {
           <span className="text-primary">Tax the next guy.</span>
         </h1>
         <p className="text-xl text-muted-foreground font-mono max-w-2xl mx-auto">
-          Buy a tile. Watch the price rise. When someone takes your spot, you get a cut. 
+          Buy a tile. Watch the price pump. When someone takes your spot, you get a cut. 
           A fast, reckless game of hot potato played on shared grids.
         </p>
       </div>
@@ -35,19 +35,19 @@ export default function Landing() {
         <div className="p-6 border-2 border-border bg-card shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <h3 className="text-xl font-bold uppercase mb-2">1. Claim Territory</h3>
           <p className="font-mono text-sm text-muted-foreground">
-            Pick an open tile or steal an owned one. Pay the current price to take control.
+            Pick an open tile or steal an owned one. Pay the current price to take control. Don't overthink it.
           </p>
         </div>
         <div className="p-6 border-2 border-border bg-card shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <h3 className="text-xl font-bold uppercase mb-2">2. Price Pumps</h3>
           <p className="font-mono text-sm text-muted-foreground">
-            Every purchase increases the tile's price by a fixed multiplier. The longer the game, the higher the stakes.
+            Every single purchase increases the tile's price by a hardcoded multiplier. The longer the game runs, the heavier the bags get.
           </p>
         </div>
         <div className="p-6 border-2 border-border bg-card shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-accent text-accent-foreground">
           <h3 className="text-xl font-bold uppercase mb-2">3. Earn Yield</h3>
           <p className="font-mono text-sm opacity-90">
-            When a buyer kicks you out, you get a guaranteed percentage of their purchase price.
+            When a buyer kicks you out, you get a fat, guaranteed percentage of whatever they just paid. You win by getting dumped.
           </p>
         </div>
       </div>

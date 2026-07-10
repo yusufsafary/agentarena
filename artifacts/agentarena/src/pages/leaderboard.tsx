@@ -19,8 +19,8 @@ export default function Leaderboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-          <CardHeader className="bg-muted">
-            <CardTitle>Top Holders</CardTitle>
+          <CardHeader className="bg-muted border-b-2 border-border">
+            <CardTitle>Whale Watch</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y-2 divide-border">
@@ -48,8 +48,8 @@ export default function Leaderboard() {
         </Card>
 
         <Card className="border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] h-fit">
-          <CardHeader className="bg-muted">
-            <CardTitle>Top Arenas by Volume</CardTitle>
+          <CardHeader className="bg-muted border-b-2 border-border">
+            <CardTitle>Heavy Hitters (Volume)</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y-2 divide-border">

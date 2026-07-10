@@ -32,15 +32,15 @@ export function WalletConnect() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="bg-primary text-black hover:bg-primary/90">
+        <Button variant="default" className="bg-primary text-black hover:bg-primary/90 font-bold uppercase">
           Connect Wallet
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Connect to Arena</DialogTitle>
+          <DialogTitle>Connect Wallet</DialogTitle>
           <DialogDescription>
-            Select a wallet to begin. No real funds are used.
+            Pick a wallet. This is a simulator, so no real funds are at risk.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -54,7 +54,7 @@ export function WalletConnect() {
                 setOpen(false);
               }}
             >
-              <div className={`w-4 h-4 rounded-full mr-4 ${w.color}`} />
+              <div className={`w-4 h-4 rounded-none border border-border mr-4 ${w.color}`} />
               {w.name}
             </Button>
           ))}
@@ -63,7 +63,7 @@ export function WalletConnect() {
               <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground font-mono">Or</span>
+              <span className="bg-background px-2 text-muted-foreground font-mono font-bold">Or</span>
             </div>
           </div>
           <Button

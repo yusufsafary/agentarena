@@ -17,7 +17,7 @@ export default function BoardView() {
   const [activeTab, setActiveTab] = useState<'activity' | 'holders' | 'chat'>('activity');
 
   if (!board) {
-    return <div className="p-8 text-center font-mono">Arena not found.</div>;
+    return <div className="p-8 text-center font-mono uppercase font-bold text-muted-foreground">Arena not found. You took a wrong turn.</div>;
   }
 
   const selectedTile = boardTiles.find(t => t.id === selectedTileId);
@@ -48,7 +48,7 @@ export default function BoardView() {
           </div>
         </div>
         
-        <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]">
+        <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]" style={{ backgroundSize: '16px 16px' }}>
           <div 
             className="grid gap-1 p-2 bg-border w-fit h-fit"
             style={{ 
@@ -116,13 +116,13 @@ export default function BoardView() {
             </div>
             <Button 
               size="lg" 
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto uppercase font-bold"
               disabled={!wallet.connected || selectedTile.ownerId === wallet.pubkey || wallet.balance < selectedTile.price}
               onClick={() => buyTile(selectedTile.id)}
             >
               {!wallet.connected ? 'Connect to Buy' : 
-               selectedTile.ownerId === wallet.pubkey ? 'Already Owned' : 
-               wallet.balance < selectedTile.price ? 'Insufficient Funds' : 
+               selectedTile.ownerId === wallet.pubkey ? 'Already Yours' : 
+               wallet.balance < selectedTile.price ? 'Too Broke' : 
                'Buy Tile'}
             </Button>
           </div>
@@ -176,12 +176,13 @@ export default function BoardView() {
                   </div>
                 );
               })}
-              {boardActivity.length === 0 && <div className="text-muted-foreground text-center mt-4">No activity yet.</div>}
+              {boardActivity.length === 0 && <div className="text-muted-foreground text-center mt-4">Ghost town. No trades yet.</div>}
             </div>
           )}
 
           {activeTab === 'holders' && (
             <div className="space-y-2">
+              {holders.length === 0 && <div className="text-muted-foreground text-center mt-4">No one holds anything here.</div>}
               {holders.map(({ id, count }, idx) => {
                 const user = users.find(u => u.id === id);
                 const isMe = id === wallet.pubkey;
@@ -208,7 +209,7 @@ export default function BoardView() {
                 <div><span className="font-bold text-green-500">Whale:</span> taking profits soon</div>
               </div>
               <div className="mt-4 p-2 border-2 border-border text-muted-foreground text-xs text-center">
-                Chat offline in simulator
+                Chat offline in simulator mode.
               </div>
             </div>
           )}
