@@ -1,0 +1,26 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "RqZMpXGvzSpfmB5MTT5mJ"
+uri = "file://attached_assets/generated_images/agentarena_logo_square.jpg"
+type = "image"
+title = "AgentArena.id — square logo mark"
+
+[[outputs]]
+id = "0IR_mLsKuYuCsirCdq31N"
+uri = "file://attached_assets/generated_images/agentarena_product_1_grid.jpg"
+type = "image"
+title = "Product image 1 — Own the grid"
+
+[[outputs]]
+id = "PJ_zpH_t_jw7_PzuBkz7c"
+uri = "file://attached_assets/generated_images/agentarena_product_2_price.jpg"
+type = "image"
+title = "Product image 2 — Price always pumps"
+
+[[outputs]]
+id = "fWiSqR3ueWyRLX3_taxzw"
+uri = "file://attached_assets/generated_images/agentarena_product_3_wallet.jpg"
+type = "image"
+title = "Product image 3 — Connect and play"
