@@ -2,6 +2,12 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { Board, Tile, User, Activity, WalletState } from './types';
 import { generateId, calculatePayout } from './utils';
 import { toast } from 'sonner';
+import {
+  connectSolanaWallet,
+  disconnectSolanaWallet,
+  generateSimulatedPubkey,
+  WalletProviderId,
+} from './solana';
 
 const INITIAL_BOARDS: Board[] = [
   { id: 'b1', name: 'The Pit', size: 10, basePrice: 1e8, growthFactor: 1.2, cutPercentage: 0.5, totalVolume: 0 },
@@ -36,9 +42,17 @@ function initTiles(boards: Board[]): Tile[] {
   return tiles;
 }
 
+const EMPTY_WALLET: WalletState = {
+  connected: false,
+  pubkey: null,
+  balance: 0,
+  provider: null,
+  isReal: false,
+};
+
 type GameContextType = {
   wallet: WalletState;
-  connectWallet: (provider: WalletState['provider']) => void;
+  connectWallet: (provider: WalletState['provider'], isReal: boolean) => Promise<void>;
   disconnectWallet: () => void;
   boards: Board[];
   tiles: Tile[];
@@ -50,12 +64,7 @@ type GameContextType = {
 const GameContext = createContext<GameContextType | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
-  const [wallet, setWallet] = useState<WalletState>({
-    connected: false,
-    pubkey: null,
-    balance: 0,
-    provider: null,
-  });
+  const [wallet, setWallet] = useState<WalletState>(EMPTY_WALLET);
 
   const [boards, setBoards] = useState<Board[]>(INITIAL_BOARDS);
   const [tiles, setTiles] = useState<Tile[]>([]);
@@ -64,23 +73,22 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // Refs so processPurchase always reads fresh state without stale closures
   const boardsRef = useRef<Board[]>(INITIAL_BOARDS);
-  const walletRef = useRef<WalletState>({ connected: false, pubkey: null, balance: 0, provider: null });
+  const walletRef = useRef<WalletState>(EMPTY_WALLET);
   useEffect(() => { boardsRef.current = boards; }, [boards]);
   useEffect(() => { walletRef.current = wallet; }, [wallet]);
 
   // Initialize from local storage or defaults
   useEffect(() => {
-    let initialWallet = {
-      connected: false,
-      pubkey: null,
-      balance: 0,
-      provider: null,
-    };
+    let initialWallet: WalletState = EMPTY_WALLET;
     try {
       const savedWallet = localStorage.getItem('agentarena_wallet');
       if (savedWallet) {
-        initialWallet = JSON.parse(savedWallet);
-        setWallet(initialWallet);
+        const parsed = JSON.parse(savedWallet) as WalletState;
+        // Don't restore "real" wallet connections on page load — user must reconnect
+        if (parsed.connected && !parsed.isReal) {
+          initialWallet = parsed;
+          setWallet(initialWallet);
+        }
       }
     } catch (e) {
       // fallback
@@ -130,41 +138,114 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Save to local storage on change
+  // Save to local storage on change (only simulated wallets)
   useEffect(() => {
     if (tiles.length > 0) {
       localStorage.setItem('agentarena_tiles', JSON.stringify(tiles));
       localStorage.setItem('agentarena_boards', JSON.stringify(boards));
-      localStorage.setItem('agentarena_activity', JSON.stringify(activity.slice(0, 100))); // keep last 100
-      localStorage.setItem('agentarena_wallet', JSON.stringify(wallet));
+      localStorage.setItem('agentarena_activity', JSON.stringify(activity.slice(0, 100)));
+      if (!wallet.isReal) {
+        localStorage.setItem('agentarena_wallet', JSON.stringify(wallet));
+      }
     }
   }, [tiles, boards, activity, wallet]);
 
-  const connectWallet = (provider: WalletState['provider']) => {
-    // In a real app, we'd interact with window.solana etc.
-    // For now, simulate
-    const newWallet = {
-      connected: true,
-      pubkey: `sim-${generateId()}${generateId()}`,
-      balance: 50 * 1e9, // 50 SOL
-      provider,
-    };
-    setWallet(newWallet);
-    
-    // Add current user to users list if not exists
-    if (!users.find(u => u.id === newWallet.pubkey)) {
-      setUsers(prev => [...prev, {
-        id: newWallet.pubkey!,
-        name: 'You',
-        balance: newWallet.balance,
-        avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you`,
-      }]);
-    }
-  };
+  const connectWallet = useCallback(async (
+    provider: WalletState['provider'],
+    isReal: boolean
+  ) => {
+    const STARTING_BALANCE = 50 * 1e9; // 50 simulated SOL
 
-  const disconnectWallet = () => {
-    setWallet({ connected: false, pubkey: null, balance: 0, provider: null });
-  };
+    if (!isReal || provider === 'simulated') {
+      // Pure simulation mode — random pubkey, no wallet extension needed
+      const pubkey = generateSimulatedPubkey();
+      const newWallet: WalletState = {
+        connected: true,
+        pubkey,
+        balance: STARTING_BALANCE,
+        provider: 'simulated',
+        isReal: false,
+        devnetBalance: 0,
+      };
+      setWallet(newWallet);
+      setUsers(prev => {
+        if (!prev.find(u => u.id === pubkey)) {
+          return [...prev, {
+            id: pubkey,
+            name: 'You',
+            balance: STARTING_BALANCE,
+            avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you`,
+          }];
+        }
+        return prev;
+      });
+      toast.success('Simulated wallet connected', {
+        description: 'You have 50 SOL to play with. None of this is real.',
+      });
+      return;
+    }
+
+    // Real wallet connection via devnet
+    const result = await connectSolanaWallet(provider as WalletProviderId);
+
+    if (!result) {
+      // Wallet not installed or user rejected — fall back to simulation
+      const pubkey = generateSimulatedPubkey();
+      const newWallet: WalletState = {
+        connected: true,
+        pubkey,
+        balance: STARTING_BALANCE,
+        provider,
+        isReal: false,
+        devnetBalance: 0,
+      };
+      setWallet(newWallet);
+      setUsers(prev => {
+        if (!prev.find(u => u.id === pubkey)) {
+          return [...prev, { id: pubkey, name: 'You', balance: STARTING_BALANCE, avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=you` }];
+        }
+        return prev;
+      });
+      toast.info(`${provider} not detected`, {
+        description: 'Running in simulated mode. Install the wallet extension for devnet connection.',
+      });
+      return;
+    }
+
+    const newWallet: WalletState = {
+      connected: true,
+      pubkey: result.pubkey,
+      balance: STARTING_BALANCE,
+      provider,
+      isReal: true,
+      devnetBalance: result.devnetBalance,
+    };
+
+    setWallet(newWallet);
+    setUsers(prev => {
+      if (!prev.find(u => u.id === result.pubkey)) {
+        return [...prev, {
+          id: result.pubkey,
+          name: 'You',
+          balance: STARTING_BALANCE,
+          avatar: `https://api.dicebear.com/7.x/pixel-art/svg?seed=${result.pubkey}`,
+        }];
+      }
+      return prev;
+    });
+
+    toast.success(`${provider} connected on Devnet`, {
+      description: `Address: ${result.pubkey.slice(0, 6)}...${result.pubkey.slice(-6)}. Game balance is separate from your on-chain SOL.`,
+    });
+  }, []);
+
+  const disconnectWallet = useCallback(() => {
+    if (wallet.isReal && wallet.provider && wallet.provider !== 'simulated') {
+      disconnectSolanaWallet(wallet.provider as WalletProviderId).catch(() => {});
+    }
+    setWallet(EMPTY_WALLET);
+    localStorage.removeItem('agentarena_wallet');
+  }, [wallet]);
 
   const processPurchase = useCallback((tileId: string, buyerId: string) => {
     setTiles(prevTiles => {
@@ -172,7 +253,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       if (tileIndex === -1) return prevTiles;
 
       const tile = prevTiles[tileIndex];
-      // Use ref to always read fresh board data, avoiding stale closure bugs
       const board = boardsRef.current.find(b => b.id === tile.boardId);
       if (!board) return prevTiles;
 
@@ -187,7 +267,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         purchaseCount: tile.purchaseCount + 1,
       };
 
-      // Update Activity
       setActivity(prev => [{
         id: generateId(),
         boardId: board.id,
@@ -198,12 +277,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         timestamp: Date.now(),
       }, ...prev].slice(0, 500));
 
-      // Update Board Volume (functional update — always fresh)
       setBoards(prevBoards => prevBoards.map(b =>
         b.id === board.id ? { ...b, totalVolume: b.totalVolume + pricePaid } : b
       ));
 
-      // Update User Balances (functional update — always fresh)
       setUsers(prevUsers => prevUsers.map(u => {
         if (u.id === buyerId) return { ...u, balance: u.balance - pricePaid };
         if (u.id === previousOwnerId) {
@@ -213,7 +290,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         return u;
       }));
 
-      // Update player wallet balance via ref to avoid stale wallet closure
       const currentWallet = walletRef.current;
       if (currentWallet.connected && buyerId === currentWallet.pubkey) {
         setWallet(w => ({ ...w, balance: w.balance - pricePaid }));
@@ -225,7 +301,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       return newTiles;
     });
-  }, []); // no stale closure deps — reads boards/wallet via refs
+  }, []);
 
   const buyTile = (tileId: string) => {
     if (!wallet.connected || !wallet.pubkey) {
@@ -252,20 +328,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Simulation Loop
+  // Simulation Loop — mock agents keep buying tiles
   const simRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     simRef.current = setInterval(() => {
-      // ~70% chance every 2 seconds — keeps the arena active
       if (Math.random() > 0.3 && tiles.length > 0) {
         const randomBoard = boards[Math.floor(Math.random() * boards.length)];
         const boardTiles = tiles.filter(t => t.boardId === randomBoard.id);
         if (boardTiles.length === 0) return;
-        
-        // Pick a tile biased towards cheaper ones or already owned ones
+
         const randomTile = boardTiles[Math.floor(Math.random() * boardTiles.length)];
-        const randomUser = users[Math.floor(Math.random() * (users.length - 1))]; // exclude 'You' if last
-        
+        const randomUser = users[Math.floor(Math.random() * (users.length - 1))];
+
         if (randomUser && randomUser.balance >= randomTile.price && randomTile.ownerId !== randomUser.id) {
           processPurchase(randomTile.id, randomUser.id);
         }

@@ -13,6 +13,7 @@ import Terms from './pages/terms';
 import Privacy from './pages/privacy';
 import Security from './pages/security';
 import Support from './pages/support';
+import Roadmap from './pages/roadmap';
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ function Router() {
         <Route path="/simulator" component={Simulator} />
         <Route path="/leaderboard" component={Leaderboard} />
         <Route path="/how-it-works" component={HowItWorks} />
+        <Route path="/roadmap" component={Roadmap} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/security" component={Security} />

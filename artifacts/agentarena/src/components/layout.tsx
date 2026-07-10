@@ -9,9 +9,11 @@ const NAV_LINKS = [
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/simulator", label: "Simulator" },
   { href: "/how-it-works", label: "How It Works" },
+  { href: "/roadmap", label: "Roadmap" },
 ];
 
 const FOOTER_LINKS = [
+  { href: "/roadmap", label: "Roadmap" },
   { href: "/security", label: "Security" },
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },
@@ -58,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="text-center md:text-left font-mono">
-                <p className="text-sm font-bold uppercase">AGENTARENA.ID // SIMULATED ENVIRONMENT</p>
+                <p className="text-sm font-bold uppercase">AGENTARENA.ID // SOLANA DEVNET SIMULATOR</p>
                 <p className="text-xs text-muted-foreground mt-1">No real value. High fake stakes. Play stupid games, win stupid prizes.</p>
               </div>
 

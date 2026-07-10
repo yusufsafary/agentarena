@@ -38,6 +38,8 @@ export type Activity = {
 export type WalletState = {
   connected: boolean;
   pubkey: string | null;
-  balance: number;
+  balance: number; // simulated game balance in lamports
   provider: 'phantom' | 'solflare' | 'backpack' | 'jupiter' | 'simulated' | null;
+  isReal: boolean; // true if connected to an actual wallet extension on devnet
+  devnetBalance?: number; // actual SOL balance on devnet (read-only, not used for game)
 };
