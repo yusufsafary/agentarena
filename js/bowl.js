@@ -83,6 +83,7 @@ let flashes = []; // seat numbers flashing after a fresh mint
 let twinkles = []; // ambient seat sparkles {n, t0}
 let wave = null; // stadium wave {t0}
 let standFlash = null; // stand highlight after a seat pick {s, t0}
+let focusStand = null; // stand explorer: other stands dim while one is focused
 let dispShown = null; // number currently displayed (count-up tween)
 let frameOn = false;
 const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -127,10 +128,12 @@ function draw(now) {
   for (let n = 1; n <= MAX; n++) {
     const { x, y, s } = seatPos(n, W, H);
     const taken = state.known && n <= state.minted;
+    ctx.globalAlpha = focusStand !== null && s !== focusStand ? 0.34 : 1;
     ctx.beginPath();
     ctx.arc(x, y, flashSet.has(n) ? dotR * 1.9 : dotR, 0, Math.PI * 2);
     ctx.fillStyle = flashSet.has(n) ? "#FFFFFF" : taken ? STANDS[s].color : "#23201A";
     ctx.fill();
+    ctx.globalAlpha = 1;
     if (standFlash && s === standFlash.s && !taken) {
       const a = 1 - (now - standFlash.t0) / 700;
       if (a > 0) {
@@ -205,6 +208,7 @@ function paint() {
   set("led-next", m >= MAX ? "None" : "Nº " + pad4(m + 1));
   set("led-status", state.open ? "Live" : "Opening soon");
   draw(performance.now());
+  updateStandCard();
 }
 
 function selectSeat(n, withPulse, quiet) {
@@ -252,13 +256,14 @@ function evtSeat(e) {
   const cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
   return seatAt(cx * (cv.width / r.width), cy * (cv.height / r.height), cv.width, cv.height);
 }
-cv.addEventListener("pointerdown", (e) => { const n = evtSeat(e); if (n) selectSeat(n, false); });
+cv.addEventListener("pointerdown", (e) => { const n = evtSeat(e); if (n) selectSeat(n, true); });
 cv.addEventListener("pointermove", (e) => { if (e.buttons & 1) { const n = evtSeat(e); if (n && n !== selected) selectSeat(n, false, true); } });
 
 const waveBtn = document.getElementById("wavebtn");
 if (waveBtn) {
   waveBtn.addEventListener("click", () => {
     wave = { t0: performance.now() };
+    burstBowl();
     kick();
     document.querySelector(".bowl-box").scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
   });
@@ -270,6 +275,7 @@ if (findBtn) {
     const v = parseInt((document.getElementById("findinput").value || "").replace(/[^0-9]/g, ""), 10);
     if (v >= 1 && v <= MAX) {
       selectSeat(v, true);
+      burstSeat(v);
       document.getElementById("stub").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   };
@@ -295,7 +301,7 @@ if (checkBtn) {
       out.textContent = seat > 0
         ? "Seat Nº " + pad4(seat) + " belongs to this wallet. Agent ID: " + (aid ? "held" : "not held") + "."
         : "No seat yet for this wallet. Agent ID: " + (aid ? "held, ready to mint" : "not held, minting needs one") + ".";
-      if (seat > 0) selectSeat(seat, true);
+      if (seat > 0) { selectSeat(seat, true); burstSeat(seat); }
     } catch (e) { out.textContent = "Chain read failed. Try again in a few seconds."; }
   });
 }
@@ -318,6 +324,126 @@ if (!RM) {
     kick();
   }, 900);
 }
+
+// ---------- v6: spotlight, stand explorer, confetti, keyboard ----------
+const stageEl = document.getElementById("stage");
+const spotEl = document.getElementById("spot");
+if (stageEl && spotEl && !RM) {
+  stageEl.addEventListener("pointermove", (e) => {
+    const r = stageEl.getBoundingClientRect();
+    spotEl.style.left = (e.clientX - r.left) + "px";
+    spotEl.style.top = (e.clientY - r.top) + "px";
+    stageEl.classList.add("lit");
+  });
+  stageEl.addEventListener("pointerleave", () => stageEl.classList.remove("lit"));
+}
+
+function updateStandCard() {
+  if (focusStand === null) return;
+  const s = focusStand, S = STANDS[s];
+  const start = s * PER_STAND + 1, end = (s + 1) * PER_STAND;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set("sc-name", S.name);
+  set("sc-range", "Nº " + pad4(start) + " – " + pad4(end));
+  const dot = document.getElementById("sc-dot"); if (dot) dot.style.background = S.color;
+  const fill = document.getElementById("sc-fill"); if (fill) fill.style.background = S.color;
+  const card = document.getElementById("standcard"); if (card) card.style.borderColor = S.color;
+  if (!state.known) { set("sc-line", "Reading the chain…"); if (fill) fill.style.width = "0%"; return; }
+  const taken = Math.max(0, Math.min(PER_STAND, state.minted - start + 1));
+  if (fill) fill.style.width = (taken / PER_STAND * 100).toFixed(1) + "%";
+  set("sc-line", taken >= PER_STAND
+    ? "This stand is full. All 1,250 seats here are taken."
+    : taken > 0
+      ? fmt(taken) + " of 1,250 seats taken here. " + fmt(PER_STAND - taken) + " still open in this stand."
+      : "No seats taken here yet. Seat Nº " + pad4(start) + " opens this stand.");
+}
+function openStand(s) {
+  focusStand = s;
+  document.querySelectorAll(".stand-tag").forEach((t) => t.classList.toggle("on", Number(t.dataset.stand) === s));
+  const card = document.getElementById("standcard");
+  if (card) card.hidden = false;
+  selectSeat(s * PER_STAND + 1, true);
+  updateStandCard();
+  draw(performance.now());
+}
+function closeStand() {
+  focusStand = null;
+  document.querySelectorAll(".stand-tag").forEach((t) => t.classList.remove("on"));
+  const card = document.getElementById("standcard");
+  if (card) card.hidden = true;
+  draw(performance.now());
+}
+document.querySelectorAll(".stand-tag").forEach((t) => {
+  t.addEventListener("click", () => {
+    const s = Number(t.dataset.stand);
+    if (focusStand === s) closeStand(); else openStand(s);
+  });
+});
+const scClose = document.getElementById("sc-close");
+if (scClose) scClose.addEventListener("click", closeStand);
+
+const fx = document.getElementById("fx");
+let parts = [], fxRun = false;
+function fxCtx() { return fx ? fx.getContext("2d") : null; }
+function sizeFx() {
+  if (!fx || !stageEl) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  fx.width = Math.round(stageEl.clientWidth * dpr);
+  fx.height = Math.round(stageEl.clientHeight * dpr);
+}
+function burst(x, y, colors) {
+  if (!fx || RM) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  for (let i = 0; i < 64; i++) {
+    const a = Math.random() * Math.PI * 2, v = (2 + Math.random() * 5.2) * dpr;
+    parts.push({ x: x * dpr, y: y * dpr, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 2.6 * dpr,
+      w: (3.5 + Math.random() * 4.5) * dpr, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3,
+      col: colors[i % colors.length], t0: performance.now() });
+  }
+  if (!fxRun) { fxRun = true; requestAnimationFrame(fxFrame); }
+}
+function fxFrame(now) {
+  const c = fxCtx(); if (!c) { fxRun = false; return; }
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  c.clearRect(0, 0, fx.width, fx.height);
+  parts = parts.filter((p) => now - p.t0 < 1500);
+  for (const p of parts) {
+    const age = (now - p.t0) / 1000;
+    p.vy += 6.5 * dpr * 0.016; p.x += p.vx; p.y += p.vy; p.vx *= 0.985; p.rot += p.vr;
+    c.save(); c.translate(p.x, p.y); c.rotate(p.rot);
+    c.globalAlpha = Math.max(0, 1 - age / 1.5);
+    c.fillStyle = p.col; c.fillRect(-p.w / 2, -p.w / 4, p.w, p.w / 2);
+    c.restore();
+  }
+  if (parts.length) requestAnimationFrame(fxFrame);
+  else { fxRun = false; c.clearRect(0, 0, fx.width, fx.height); }
+}
+function burstSeat(n) {
+  if (!stageEl) return;
+  const r = cv.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+  const pos = seatPos(n, 1000, 1000);
+  burst(r.left - sr.left + (pos.x / 1000) * r.width, r.top - sr.top + (pos.y / 1000) * r.height,
+    [STANDS[pos.s].color, "#F4EFE3", "#E8B33D"]);
+}
+function burstBowl() {
+  if (!stageEl) return;
+  const r = cv.getBoundingClientRect(), sr = stageEl.getBoundingClientRect();
+  burst(r.left - sr.left + r.width / 2, r.top - sr.top + r.height / 2,
+    STANDS.map((x) => x.color).concat(["#F4EFE3"]));
+}
+if (stageEl && fx) { new ResizeObserver(sizeFx).observe(stageEl); sizeFx(); }
+
+document.addEventListener("keydown", (e) => {
+  if (!selected) return;
+  const tag = (e.target && e.target.tagName) || "";
+  if (tag === "INPUT" || tag === "TEXTAREA") return;
+  let n = null;
+  if (e.key === "ArrowRight") n = selected + 1;
+  else if (e.key === "ArrowLeft") n = selected - 1;
+  else if (e.key === "ArrowDown") n = selected + PER_ROW;
+  else if (e.key === "ArrowUp") n = selected - PER_ROW;
+  if (n !== null) { e.preventDefault(); selectSeat(Math.max(1, Math.min(MAX, n)), false); }
+});
 
 // Scroll reveal for the lower sections. The LED board types its post in.
 const ledText = document.querySelector(".led-text");

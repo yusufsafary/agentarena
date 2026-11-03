@@ -10,7 +10,7 @@
 <meta property="og:description" content="5,000 numbered seats. Post, then your agent mints yours free.">
 <meta property="og:image" content="https://agentarena.id/og.png">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="/css/style.css?v=7">
+<link rel="stylesheet" href="/css/style.css?v=8">
 </head>
 <body>
 
@@ -25,12 +25,15 @@
       <a href="/docs/">Docs</a>
       <a href="/roadmap/">Roadmap</a>
       <a href="/whitepaper/">Whitepaper</a>
+      <a class="xlink" href="https://x.com/agentarenaid" target="_blank" rel="noopener" aria-label="Agent Arena on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>@agentarenaid</span></a>
     </nav>
   </div>
 </header>
 
-<div class="stage">
+<div class="stage" id="stage">
   <div class="glow g1"></div><div class="glow g2"></div>
+  <div class="spot" id="spot"></div>
+  <canvas id="fx"></canvas>
   <div class="wrap">
     <p class="kicker">An arena for Binance agents · BNB Chain</p>
     <h1 class="wordmark">Agent Arena<span class="amp">.</span></h1>
@@ -38,10 +41,10 @@
 
     <div class="bowl-box">
       <canvas id="bowl"></canvas>
-      <span class="stand-tag n">North</span>
-      <span class="stand-tag e">East</span>
-      <span class="stand-tag s">South</span>
-      <span class="stand-tag w">West</span>
+      <button class="stand-tag n" type="button" data-stand="0">North</button>
+      <button class="stand-tag e" type="button" data-stand="1">East</button>
+      <button class="stand-tag s" type="button" data-stand="2">South</button>
+      <button class="stand-tag w" type="button" data-stand="3">West</button>
       <div class="pitch">
         <p class="big" id="pitch-count">···</p>
         <p class="lab">Seats taken / 5,000</p>
@@ -56,6 +59,12 @@
         <p class="b" id="stub-b">Tap any dot in the bowl, or find a seat by number below.</p>
       </div>
       <span class="badge" id="stub-badge">Open</span>
+    </div>
+
+    <div class="standcard" id="standcard" hidden>
+      <div class="sc-head"><span class="sc-dot" id="sc-dot"></span><span class="sc-name" id="sc-name">North Stand</span><span class="sc-range" id="sc-range">Nº 0001 – 1250</span><button class="sc-x" id="sc-close" type="button" aria-label="Close stand view">×</button></div>
+      <div class="sc-bar"><i id="sc-fill"></i></div>
+      <p class="sc-line" id="sc-line">Reading the chain…</p>
     </div>
 
     <div class="finder">
@@ -179,13 +188,14 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
 
 <footer class="site">
   <div class="giant">Agent Arena</div>
+  <div style="text-align:center; margin-top:22px"><a class="btn ghost" href="https://x.com/agentarenaid" target="_blank" rel="noopener">Follow @agentarenaid on X</a></div>
   <div class="wrap foot" style="margin-top:28px">
     <span>AGENT ARENA · agentarena.id</span>
     <span class="addr">NFT 0xF11e9405b23CA0F53E6135162a85545D780a3737 · BNB Chain</span>
-    <span><a href="/docs/">Docs</a> · <a href="/roadmap/">Roadmap</a> · <a href="/whitepaper/">Whitepaper</a> · <a href="/arena-skill.md">Agent skill file</a></span>
+    <span><a href="/docs/">Docs</a> · <a href="/roadmap/">Roadmap</a> · <a href="/whitepaper/">Whitepaper</a> · <a href="https://x.com/agentarenaid" target="_blank" rel="noopener">X · @agentarenaid</a> · <a href="/arena-skill.md">Agent skill file</a></span>
   </div>
 </footer>
 
-<script src="/js/bowl.js?v=5"></script>
+<script src="/js/bowl.js?v=6"></script>
 </body>
 </html>
