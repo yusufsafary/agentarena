@@ -263,3 +263,26 @@ button.stand-tag.on { background: rgba(244,239,227,0.10); box-shadow: 0 0 0 1.5p
 .sc-bar i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .sc-line { color: var(--mute); font-size: 13.5px; margin-top: 10px; }
 @media (prefers-reduced-motion: reduce) { .spot { display: none; } }
+
+/* ---- v7: stub actions, dice, scrub slider, stand bars, mint toast ---- */
+.stub-actions { width: min(100%, 680px); margin: 10px auto 0; display: flex; gap: 8px; position: relative; z-index: 2; }
+.stub-actions[hidden] { display: none; }
+.mini-btn { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--bone); background: var(--panel); border: 1px solid var(--line); border-radius: 99px; padding: 9px 15px; cursor: pointer; display: inline-block; }
+.mini-btn:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+.finder .dice { flex: none; width: 50px; padding: 13px 0; display: grid; place-items: center; }
+.scrubrow { width: min(100%, 680px); margin: 2px auto 10px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.scrubrow input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 99px; background: #23201a; outline: none; cursor: ew-resize; }
+.scrubrow input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); border: 3px solid #171106; box-shadow: 0 0 0 1.5px var(--gold); cursor: ew-resize; }
+.scrubrow input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--gold); border: 3px solid #171106; box-shadow: 0 0 0 1.5px var(--gold); cursor: ew-resize; }
+.standbars { width: min(100%, 680px); margin: 4px auto 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: relative; z-index: 2; }
+@media (min-width: 720px) { .standbars { grid-template-columns: repeat(4, 1fr); } }
+.standbar { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; text-align: left; cursor: pointer; color: var(--bone); transition: border-color 0.25s; }
+.standbar:hover { border-color: var(--sc); }
+.standbar.on { border-color: var(--sc); box-shadow: 0 0 0 1px var(--sc) inset; }
+.standbar .sb-top { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sc); display: flex; align-items: center; gap: 7px; }
+.standbar .sb-top i { width: 8px; height: 8px; border-radius: 50%; background: var(--sc); flex: none; }
+.standbar .sb-track { display: block; height: 6px; border-radius: 99px; background: #23201a; margin-top: 9px; overflow: hidden; }
+.standbar .sb-track i { display: block; height: 100%; width: 0; transition: width 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.standbar .sb-num { display: block; font-family: var(--mono); font-size: 11px; color: var(--mute); margin-top: 7px; }
+.toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 18px); background: var(--gold); color: #171106; font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: 0.04em; padding: 12px 20px; border-radius: 99px; z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.35s ease, transform 0.35s ease; box-shadow: 0 12px 34px rgba(0,0,0,0.5); white-space: nowrap; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }

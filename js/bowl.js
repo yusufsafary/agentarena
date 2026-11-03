@@ -84,6 +84,7 @@ let twinkles = []; // ambient seat sparkles {n, t0}
 let wave = null; // stadium wave {t0}
 let standFlash = null; // stand highlight after a seat pick {s, t0}
 let focusStand = null; // stand explorer: other stands dim while one is focused
+let pointer = null; // {x, y, t0} canvas coords: fisheye lens follows the finger
 let dispShown = null; // number currently displayed (count-up tween)
 let frameOn = false;
 const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -91,7 +92,7 @@ const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: redu
 function frame(now) {
   draw(now);
   twinkles = twinkles.filter((t) => now - t.t0 < 1300);
-  const busy = pulse || twinkles.length || (wave && now - wave.t0 < 5600) || (standFlash && now - standFlash.t0 < 700);
+  const busy = pulse || twinkles.length || (wave && now - wave.t0 < 5600) || (standFlash && now - standFlash.t0 < 700) || (pointer && now - pointer.t0 < 180);
   if (busy) requestAnimationFrame(frame);
   else { frameOn = false; wave = null; standFlash = null; }
 }
@@ -123,14 +124,29 @@ function draw(now) {
   ctx.strokeStyle = "#E8B33D";
   ctx.lineWidth = Math.max(2.5, W / 260);
   ctx.stroke();
+  // Fisheye lens: a soft light under the finger, seats swell inside it.
+  if (pointer) {
+    const lg = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, W * 0.17);
+    lg.addColorStop(0, "rgba(244,239,227,0.10)");
+    lg.addColorStop(1, "rgba(244,239,227,0)");
+    ctx.fillStyle = lg;
+    ctx.beginPath();
+    ctx.arc(pointer.x, pointer.y, W * 0.17, 0, Math.PI * 2);
+    ctx.fill();
+  }
   const flashSet = new Set(flashes);
   const waveC = wave ? -Math.PI / 2 + ((now - wave.t0) / 5600) * Math.PI * 4 : null;
   for (let n = 1; n <= MAX; n++) {
     const { x, y, s } = seatPos(n, W, H);
     const taken = state.known && n <= state.minted;
     ctx.globalAlpha = focusStand !== null && s !== focusStand ? 0.34 : 1;
+    let rr = flashSet.has(n) ? dotR * 1.9 : dotR;
+    if (pointer) {
+      const dd = Math.hypot(x - pointer.x, y - pointer.y), L = W * 0.13;
+      if (dd < L) rr *= 1 + 1.6 * (1 - dd / L);
+    }
     ctx.beginPath();
-    ctx.arc(x, y, flashSet.has(n) ? dotR * 1.9 : dotR, 0, Math.PI * 2);
+    ctx.arc(x, y, rr, 0, Math.PI * 2);
     ctx.fillStyle = flashSet.has(n) ? "#FFFFFF" : taken ? STANDS[s].color : "#23201A";
     ctx.fill();
     ctx.globalAlpha = 1;
@@ -204,6 +220,12 @@ function paint() {
     };
     requestAnimationFrame(step);
   }
+  for (let s = 0; s < 4; s++) {
+    const takenS = Math.max(0, Math.min(PER_STAND, m - (s * PER_STAND + 1) + 1));
+    const f = document.getElementById("sbfill-" + s);
+    if (f) { f.style.width = (takenS / PER_STAND * 100).toFixed(1) + "%"; f.style.background = STANDS[s].color; }
+    set("sbnum-" + s, fmt(takenS) + " / 1,250");
+  }
   set("pitch-next", state.open ? (m >= MAX ? "ARENA FULL" : "NEXT SEAT · Nº " + pad4(m + 1)) : "DOORS OPENING SOON");
   set("led-next", m >= MAX ? "None" : "Nº " + pad4(m + 1));
   set("led-status", state.open ? "Live" : "Opening soon");
@@ -229,6 +251,15 @@ function selectSeat(n, withPulse, quiet) {
   }
   const stub = document.getElementById("stub");
   if (stub && !quiet) { stub.classList.remove("pop"); void stub.offsetWidth; stub.classList.add("pop"); }
+  const acts = document.getElementById("stub-actions");
+  if (acts) {
+    acts.hidden = false;
+    const sh = document.getElementById("share-x");
+    if (sh) sh.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent("Seat Nº " + pad4(n) + " at Agent Arena. One agent, one seat, numbered forever. agentarena.id");
+  }
+  const sc = document.getElementById("scrub");
+  if (sc && Number(sc.value) !== n) sc.value = n;
+  if (!quiet && navigator.vibrate) { try { navigator.vibrate(8); } catch (e) {} }
   draw(performance.now());
   kick();
 }
@@ -242,6 +273,10 @@ async function refresh() {
       flashes = [];
       for (let n = state.minted + 1; n <= minted; n++) flashes.push(n);
       setTimeout(() => { flashes = []; draw(performance.now()); }, 4000);
+      showToast(minted - state.minted === 1
+        ? "Seat Nº " + pad4(minted) + " just filled · " + fmt(minted) + " / 5,000"
+        : "Seats Nº " + pad4(state.minted + 1) + " to " + pad4(minted) + " just filled · " + fmt(minted) + " / 5,000");
+      if (minted - state.minted === 1) burstSeat(minted);
     }
     state = { minted, open, known: true };
     paint();
@@ -256,8 +291,21 @@ function evtSeat(e) {
   const cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
   return seatAt(cx * (cv.width / r.width), cy * (cv.height / r.height), cv.width, cv.height);
 }
-cv.addEventListener("pointerdown", (e) => { const n = evtSeat(e); if (n) selectSeat(n, true); });
-cv.addEventListener("pointermove", (e) => { if (e.buttons & 1) { const n = evtSeat(e); if (n && n !== selected) selectSeat(n, false, true); } });
+function setPointer(e) {
+  const r = cv.getBoundingClientRect();
+  pointer = { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height), t0: performance.now() };
+  kick();
+}
+cv.addEventListener("pointerdown", (e) => { setPointer(e); const n = evtSeat(e); if (n) selectSeat(n, true); });
+cv.addEventListener("pointermove", (e) => {
+  setPointer(e);
+  if (e.buttons & 1) {
+    const n = evtSeat(e);
+    if (n && n !== selected) selectSeat(n, false, true);
+    if (n && Math.random() < 0.3) twinkles.push({ n, t0: performance.now() });
+  }
+});
+cv.addEventListener("pointerleave", () => { pointer = null; draw(performance.now()); });
 
 const waveBtn = document.getElementById("wavebtn");
 if (waveBtn) {
@@ -360,6 +408,7 @@ function updateStandCard() {
 function openStand(s) {
   focusStand = s;
   document.querySelectorAll(".stand-tag").forEach((t) => t.classList.toggle("on", Number(t.dataset.stand) === s));
+  document.querySelectorAll(".standbar").forEach((b) => b.classList.toggle("on", Number(b.dataset.stand) === s));
   const card = document.getElementById("standcard");
   if (card) card.hidden = false;
   selectSeat(s * PER_STAND + 1, true);
@@ -369,6 +418,7 @@ function openStand(s) {
 function closeStand() {
   focusStand = null;
   document.querySelectorAll(".stand-tag").forEach((t) => t.classList.remove("on"));
+  document.querySelectorAll(".standbar").forEach((b) => b.classList.remove("on"));
   const card = document.getElementById("standcard");
   if (card) card.hidden = true;
   draw(performance.now());
@@ -443,6 +493,46 @@ document.addEventListener("keydown", (e) => {
   else if (e.key === "ArrowDown") n = selected + PER_ROW;
   else if (e.key === "ArrowUp") n = selected - PER_ROW;
   if (n !== null) { e.preventDefault(); selectSeat(Math.max(1, Math.min(MAX, n)), false); }
+});
+
+// ---------- v7: mint toast, random seat, scrub slider, copy, stand bars ----------
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.hidden = false;
+  requestAnimationFrame(() => t.classList.add("show"));
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(() => { t.classList.remove("show"); setTimeout(() => { t.hidden = true; }, 400); }, 4200);
+}
+const randBtn = document.getElementById("randbtn");
+if (randBtn) {
+  randBtn.addEventListener("click", () => {
+    const n = 1 + Math.floor(Math.random() * MAX);
+    selectSeat(n, true);
+    burstSeat(n);
+    document.getElementById("stub").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+const scrubEl = document.getElementById("scrub");
+if (scrubEl) {
+  scrubEl.addEventListener("input", () => selectSeat(Number(scrubEl.value), false, true));
+  scrubEl.addEventListener("change", () => selectSeat(Number(scrubEl.value), true));
+}
+const copyBtn = document.getElementById("copy-seat");
+if (copyBtn) {
+  copyBtn.addEventListener("click", async () => {
+    if (!selected) return;
+    try { await navigator.clipboard.writeText("Nº " + pad4(selected)); copyBtn.textContent = "Copied Nº " + pad4(selected); }
+    catch (e) { copyBtn.textContent = "Nº " + pad4(selected); }
+    setTimeout(() => { copyBtn.textContent = "Copy seat Nº"; }, 1600);
+  });
+}
+document.querySelectorAll(".standbar").forEach((b) => {
+  b.addEventListener("click", () => {
+    const s = Number(b.dataset.stand);
+    if (focusStand === s) closeStand(); else openStand(s);
+  });
 });
 
 // Scroll reveal for the lower sections. The LED board types its post in.
