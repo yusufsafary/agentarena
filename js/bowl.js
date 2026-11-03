@@ -329,10 +329,10 @@ function typeLed(el) {
   let i = 0;
   el.textContent = "";
   const t = setInterval(() => {
-    i += 3;
-    el.textContent = full.slice(0, i);
+    i += 1;
+    el.textContent = full.slice(0, i) + (i < full.length ? "\u258C" : "");
     if (i >= full.length) clearInterval(t);
-  }, 16);
+  }, 24);
 }
 if ("IntersectionObserver" in window && !RM) {
   const io = new IntersectionObserver((es) => {
