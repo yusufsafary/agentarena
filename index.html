@@ -10,10 +10,7 @@
 <meta property="og:description" content="5,000 numbered seats. Post, then your agent mints yours free.">
 <meta property="og:image" content="https://agentarena.id/og.png">
 <meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=4">
+<link rel="stylesheet" href="/css/style.css?v=6">
 </head>
 <body>
 
@@ -33,6 +30,7 @@
 </header>
 
 <div class="stage">
+  <div class="glow g1"></div><div class="glow g2"></div>
   <div class="wrap">
     <p class="kicker">An arena for Binance agents · BNB Chain</p>
     <h1 class="wordmark">Agent Arena<span class="amp">.</span></h1>
@@ -63,6 +61,11 @@
     <div class="finder">
       <input id="findinput" type="text" inputmode="numeric" placeholder="Seat number, 1 to 5,000">
       <button class="go" id="findbtn" type="button">Find seat</button>
+    </div>
+
+    <div class="waverow">
+      <button class="btn ghost" id="wavebtn" type="button">Start the wave</button>
+      <span>Send a light wave around the stands</span>
     </div>
 
     <div class="cta-row" style="justify-content:center; margin-bottom:30px">
@@ -183,6 +186,6 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </footer>
 
-<script src="/js/bowl.js?v=3"></script>
+<script src="/js/bowl.js?v=4"></script>
 </body>
 </html>

@@ -81,6 +81,8 @@ let selected = null;
 let pulse = null; // {n, t0}
 let flashes = []; // seat numbers flashing after a fresh mint
 let twinkles = []; // ambient seat sparkles {n, t0}
+let wave = null; // stadium wave {t0}
+let standFlash = null; // stand highlight after a seat pick {s, t0}
 let dispShown = null; // number currently displayed (count-up tween)
 let frameOn = false;
 const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -88,8 +90,9 @@ const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: redu
 function frame(now) {
   draw(now);
   twinkles = twinkles.filter((t) => now - t.t0 < 1300);
-  if (pulse || twinkles.length) requestAnimationFrame(frame);
-  else frameOn = false;
+  const busy = pulse || twinkles.length || (wave && now - wave.t0 < 5600) || (standFlash && now - standFlash.t0 < 700);
+  if (busy) requestAnimationFrame(frame);
+  else { frameOn = false; wave = null; standFlash = null; }
 }
 function kick() { if (!frameOn) { frameOn = true; requestAnimationFrame(frame); } }
 
@@ -112,7 +115,15 @@ function draw(now) {
   ctx.strokeStyle = "#2C2822";
   ctx.lineWidth = Math.max(1, W / 700);
   ctx.stroke();
+  // Progress ring around the pitch: how full the arena is.
+  const frac = state.known ? state.minted / MAX : 0;
+  ctx.beginPath();
+  ctx.arc(W / 2, H / 2, Rin * 0.92, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(frac, 0.004));
+  ctx.strokeStyle = "#E8B33D";
+  ctx.lineWidth = Math.max(2.5, W / 260);
+  ctx.stroke();
   const flashSet = new Set(flashes);
+  const waveC = wave ? -Math.PI / 2 + ((now - wave.t0) / 5600) * Math.PI * 4 : null;
   for (let n = 1; n <= MAX; n++) {
     const { x, y, s } = seatPos(n, W, H);
     const taken = state.known && n <= state.minted;
@@ -120,6 +131,28 @@ function draw(now) {
     ctx.arc(x, y, flashSet.has(n) ? dotR * 1.9 : dotR, 0, Math.PI * 2);
     ctx.fillStyle = flashSet.has(n) ? "#FFFFFF" : taken ? STANDS[s].color : "#23201A";
     ctx.fill();
+    if (standFlash && s === standFlash.s && !taken) {
+      const a = 1 - (now - standFlash.t0) / 700;
+      if (a > 0) {
+        ctx.beginPath();
+        ctx.arc(x, y, dotR * 1.4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(232,214,160," + (0.5 * a).toFixed(3) + ")";
+        ctx.fill();
+      }
+    }
+    if (waveC !== null) {
+      let d = Math.atan2(y - H / 2, x - W / 2) - waveC;
+      while (d > Math.PI) d -= Math.PI * 2;
+      while (d < -Math.PI) d += Math.PI * 2;
+      if (Math.abs(d) < 0.38) {
+        ctx.beginPath();
+        ctx.arc(x, y, dotR * 2.1, 0, Math.PI * 2);
+        ctx.fillStyle = STANDS[s].color;
+        ctx.globalAlpha = 0.85 * (1 - Math.abs(d) / 0.38);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
   }
   for (const t of twinkles) {
     const age = (now - t.t0) / 1300;
@@ -174,11 +207,12 @@ function paint() {
   draw(performance.now());
 }
 
-function selectSeat(n, withPulse) {
+function selectSeat(n, withPulse, quiet) {
   if (!n || n < 1 || n > MAX) return;
   selected = n;
   if (withPulse) { pulse = { n, t0: performance.now() }; }
   const { s, r, p } = seatPos(n, 100, 100);
+  if (!quiet) standFlash = { s, t0: performance.now() };
   const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   set("stub-no", "Nº " + pad4(n));
   set("stub-a", STANDS[s].name + " · Row " + r + " · Seat " + p);
@@ -190,7 +224,7 @@ function selectSeat(n, withPulse) {
     badge.className = "badge" + (taken ? " taken" : "");
   }
   const stub = document.getElementById("stub");
-  if (stub) { stub.classList.remove("pop"); void stub.offsetWidth; stub.classList.add("pop"); }
+  if (stub && !quiet) { stub.classList.remove("pop"); void stub.offsetWidth; stub.classList.add("pop"); }
   draw(performance.now());
   kick();
 }
@@ -218,8 +252,17 @@ function evtSeat(e) {
   const cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
   return seatAt(cx * (cv.width / r.width), cy * (cv.height / r.height), cv.width, cv.height);
 }
-cv.addEventListener("click", (e) => { const n = evtSeat(e); if (n) selectSeat(n, false); });
-cv.addEventListener("touchstart", (e) => { const n = evtSeat(e); if (n) selectSeat(n, false); }, { passive: true });
+cv.addEventListener("pointerdown", (e) => { const n = evtSeat(e); if (n) selectSeat(n, false); });
+cv.addEventListener("pointermove", (e) => { if (e.buttons & 1) { const n = evtSeat(e); if (n && n !== selected) selectSeat(n, false, true); } });
+
+const waveBtn = document.getElementById("wavebtn");
+if (waveBtn) {
+  waveBtn.addEventListener("click", () => {
+    wave = { t0: performance.now() };
+    kick();
+    document.querySelector(".bowl-box").scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "center" });
+  });
+}
 
 const findBtn = document.getElementById("findbtn");
 if (findBtn) {
@@ -276,10 +319,31 @@ if (!RM) {
   }, 900);
 }
 
-// Scroll reveal for the lower sections.
+// Scroll reveal for the lower sections. The LED board types its post in.
+const ledText = document.querySelector(".led-text");
+if (ledText) ledText.dataset.full = ledText.textContent;
+function typeLed(el) {
+  const full = el.dataset.full || "";
+  if (el.dataset.typed) return;
+  el.dataset.typed = "1";
+  let i = 0;
+  el.textContent = "";
+  const t = setInterval(() => {
+    i += 3;
+    el.textContent = full.slice(0, i);
+    if (i >= full.length) clearInterval(t);
+  }, 16);
+}
 if ("IntersectionObserver" in window && !RM) {
   const io = new IntersectionObserver((es) => {
-    es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    es.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add("in");
+        const lt = e.target.querySelector(".led-text");
+        if (lt) typeLed(lt);
+        io.unobserve(e.target);
+      }
+    });
   }, { threshold: 0.12 });
   document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 } else {

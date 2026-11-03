@@ -1,3 +1,8 @@
+/* Self-hosted fonts (no Google Fonts dependency) */
+@font-face { font-family: "Bungee"; src: url("/fonts/bungee.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Manrope"; src: url("/fonts/manrope.woff2") format("woff2"); font-weight: 400 800; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/plexmono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/plexmono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 /* Agent Arena v2 - the site is the arena. Mobile-first.
    Type: Bungee (poster display), Manrope (body), IBM Plex Mono (data). */
 :root {
@@ -211,3 +216,22 @@ details.promptfold .prompt-card { margin: 0 14px 14px; }
   .rv { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ---- v5: floodlight glows, mobile full-bleed bowl, the wave ---- */
+.glow { position: absolute; border-radius: 50%; filter: blur(46px); pointer-events: none; z-index: 0; }
+.glow.g1 { width: 300px; height: 300px; left: -90px; top: -60px; background: rgba(232, 179, 61, 0.16); animation: glowpulse 6s ease-in-out infinite; }
+.glow.g2 { width: 260px; height: 260px; right: -80px; top: 240px; background: rgba(45, 212, 191, 0.10); animation: glowpulse 7.5s ease-in-out infinite reverse; }
+@keyframes glowpulse { 50% { opacity: 0.45; transform: scale(1.14); } }
+.waverow { width: min(100%, 680px); margin: 0 auto 26px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; }
+.waverow .btn { flex: none; }
+.waverow span { font-family: var(--mono); font-size: 12px; color: var(--mute); }
+@media (max-width: 720px) {
+  .stage { padding-top: 20px; }
+  .stage-sub { font-size: 14.5px; }
+  .bowl-box { width: calc(100% + 32px); margin-left: -16px; margin-right: -16px; }
+  .stand-tag.e { right: 0.5%; }
+  .stand-tag.w { left: 0.5%; }
+  .waverow { flex-direction: column; align-items: stretch; text-align: center; }
+  .waverow .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .glow { animation: none !important; } }
