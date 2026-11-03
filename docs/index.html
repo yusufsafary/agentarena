@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs · Agent Arena</title>
+<meta name="description" content="How Agent Arena works: post, mint, and hold a numbered seat. Rules, artwork positions, contract and answers.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/"><img src="/logo.svg" alt="Agent Arena logo">AGENT ARENA</a>
+    <nav>
+      <a href="/#post">Post</a>
+      <a href="/#mint">Mint</a>
+      <a href="/docs/">Docs</a>
+      <a href="/roadmap/">Roadmap</a>
+      <a href="/whitepaper/">Whitepaper</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap page-hero">
+  <p class="kicker">Documentation</p>
+  <h1>How the arena works</h1>
+  <p class="sub">Two steps and one rule. Post the entry tweet, let your agent mint, hold one numbered seat. Everything else is detail, and all of it is on this page.</p>
+</div>
+
+<section class="block">
+  <div class="wrap prose">
+    <h2>Entering, step by step</h2>
+    <p><strong>1 · Post.</strong> Your agent hands you the entry post: "Entering Agent Arena. One agent, one seat, numbered forever. My agent takes my seat for free. agentarena.id". You post it on X and tell your agent it is live. Agents hold no X account, so the post is always yours.</p>
+    <p><strong>2 · Mint.</strong> Your agent checks that your agentic wallet holds a Binance Agent ID, then calls the mint function on the Agent Arena contract. The mint is free: no price and no platform fee, only the network's own gas. The seat number you receive is the next unclaimed number in the arena.</p>
+    <p><strong>3 · Hold or trade.</strong> Your seat is an NFT in your wallet. It trades on Element like any other seat, and its number never changes.</p>
+
+    <h2>House rules</h2>
+    <ul>
+      <li>One seat per wallet, ever. The contract enforces this; a second mint from the same wallet always fails.</li>
+      <li>A Binance Agent ID is required to mint. Reading this site is open to everyone; entering is for agent wallets.</li>
+      <li>Minting happens only through your own agent. This site never connects a wallet and never mints in a browser.</li>
+      <li>Seats are issued strictly in entry order. Nobody can choose, reserve, or skip a number.</li>
+      <li>Supply is fixed at 5,000 in the contract. It cannot be raised.</li>
+    </ul>
+
+    <h2>Reading a seat</h2>
+    <p>Every artwork carries its seat number large, plus its position inside the arena. Position is geography, not rank: all seats are equal, and the stand a seat lands in follows purely from its number.</p>
+    <table class="spec">
+      <tr><th>Seats</th><th>Stand</th><th>Rows</th></tr>
+      <tr><td>Nº 0001 – 1250</td><td>North Stand</td><td>50 rows of 25</td></tr>
+      <tr><td>Nº 1251 – 2500</td><td>East Stand</td><td>50 rows of 25</td></tr>
+      <tr><td>Nº 2501 – 3750</td><td>South Stand</td><td>50 rows of 25</td></tr>
+      <tr><td>Nº 3751 – 5000</td><td>West Stand</td><td>50 rows of 25</td></tr>
+    </table>
+
+    <h2>Contract ledger</h2>
+    <table class="spec">
+      <tr><td>Collection</td><td>Agent Arena (SEAT)</td></tr>
+      <tr><td>Contract</td><td class="addr"><a href="https://bscscan.com/address/0xF11e9405b23CA0F53E6135162a85545D780a3737" target="_blank" rel="noopener">0xF11e9405b23CA0F53E6135162a85545D780a3737</a></td></tr>
+      <tr><td>Chain</td><td>BNB Chain (BSC)</td></tr>
+      <tr><td>Supply</td><td>5,000, fixed in contract</td></tr>
+      <tr><td>Mint</td><td>Free, 1 per wallet, Agent ID required</td></tr>
+      <tr><td>Metadata</td><td>agentarena.id/metadata/&lt;seat number&gt;</td></tr>
+      <tr><td>Agent skill file</td><td><a href="/arena-skill.md">agentarena.id/arena-skill.md</a></td></tr>
+    </table>
+
+    <h2>Questions</h2>
+    <p><strong>Why post before minting?</strong> An arena fills because people watch others walk in. The post is the sound of a seat being taken, and it keeps entry social instead of silent.</p>
+    <p><strong>Can I pick a low number?</strong> No. Numbers are issued in order. The only way to a low number is to arrive early.</p>
+    <p><strong>What does my agent need?</strong> A Binance Agentic Wallet holding a Binance Agent ID and a small amount of BNB for network gas. The mint itself is free.</p>
+    <p><strong>My mint failed. Why?</strong> Four usual causes: no Agent ID in the wallet, the wallet already holds a seat, mint is not open yet, or the call was routed through another contract. Your agent can name the exact cause from the contract response.</p>
+    <p><strong>Is there a token?</strong> A token phase follows a full arena. Its design is set out in the <a href="/whitepaper/">whitepaper</a> and its timing in the <a href="/roadmap/">roadmap</a>.</p>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>AGENT ARENA · agentarena.id</span>
+    <span class="addr">NFT 0xF11e9405b23CA0F53E6135162a85545D780a3737 · BNB Chain</span>
+    <span><a href="/docs/">Docs</a> · <a href="/roadmap/">Roadmap</a> · <a href="/whitepaper/">Whitepaper</a> · <a href="/arena-skill.md">Agent skill file</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

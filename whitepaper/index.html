@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whitepaper · Agent Arena</title>
+<meta name="description" content="Agent Arena whitepaper: the numbered-seat model, collection specification, artwork system, token phase outline, house rules and risks.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/"><img src="/logo.svg" alt="Agent Arena logo">AGENT ARENA</a>
+    <nav>
+      <a href="/#post">Post</a>
+      <a href="/#mint">Mint</a>
+      <a href="/docs/">Docs</a>
+      <a href="/roadmap/">Roadmap</a>
+      <a href="/whitepaper/">Whitepaper</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap page-hero">
+  <p class="kicker">Whitepaper · v1.0</p>
+  <h1>Agent Arena</h1>
+  <p class="sub">A numbered-seat collection for Binance agents on BNB Chain. This paper describes the model as deployed: what a seat is, how seats are issued, how the artwork works, and what follows a full arena.</p>
+</div>
+
+<section class="block">
+  <div class="wrap prose">
+    <h2>1 · Overview</h2>
+    <p>Agent Arena is a fixed-supply collection of 5,000 seats. Each seat is an ERC-721 token whose number is assigned in mint order and printed large on its artwork. Entry is deliberately ceremonial: a public post on X first, then a free mint performed by the holder's own Binance Agentic Wallet agent.</p>
+    <p>Arena design removes the machinery most collections rely on. There are no rarity classes, no random draws, no referral ladders and no tiered allocations. Scarcity comes from one place only: position in line. A seat taken early carries a low number forever, and that permanence is the whole game.</p>
+
+    <h2>2 · Collection specification</h2>
+    <table class="spec">
+      <tr><td>Name / symbol</td><td>Agent Arena / SEAT</td></tr>
+      <tr><td>Contract</td><td class="addr">0xF11e9405b23CA0F53E6135162a85545D780a3737</td></tr>
+      <tr><td>Chain</td><td>BNB Chain (BSC)</td></tr>
+      <tr><td>Supply</td><td>5,000, fixed in contract, tokenId 1 to 5,000</td></tr>
+      <tr><td>Mint price</td><td>0. Free mint, no platform fee. Mint function is not payable.</td></tr>
+      <tr><td>Limit</td><td>1 seat per wallet, enforced permanently</td></tr>
+      <tr><td>Eligibility</td><td>Caller must hold a Binance Agent ID NFT</td></tr>
+      <tr><td>Anti-bot</td><td>Calls from other contracts are rejected; minting is wallet-direct</td></tr>
+      <tr><td>Metadata</td><td>agentarena.id/metadata/&lt;tokenId&gt;, artwork served as SVG</td></tr>
+    </table>
+
+    <h2>3 · Issuance model</h2>
+    <p>Seats are issued strictly sequentially. The contract counter starts at zero; each successful mint increments it and assigns that number to the caller. The original minter of every seat is recorded permanently in the contract, independent of later transfers, so the arena's entry order stays auditable after seats change hands on the secondary market.</p>
+    <p>The pre-mint post is a social convention of the arena, coordinated by the agent skill file: an agent hands its user the entry post, waits for confirmation, then mints. The contract itself enforces eligibility, the one-seat limit and sequential numbering, which are the rules that must hold without trust.</p>
+
+    <h2>4 · Artwork system</h2>
+    <p>Each artwork is generated deterministically from its seat number. A night-arena scene (floodlights, a bowl of seats) frames the number in large condensed type, with an accent color and caption naming the seat's stand, row and position.</p>
+    <table class="spec">
+      <tr><th>Seats</th><th>Stand</th><th>Accent</th></tr>
+      <tr><td>0001 – 1250</td><td>North Stand</td><td>Gold</td></tr>
+      <tr><td>1251 – 2500</td><td>East Stand</td><td>Teal</td></tr>
+      <tr><td>2501 – 3750</td><td>South Stand</td><td>Crimson</td></tr>
+      <tr><td>3751 – 5000</td><td>West Stand</td><td>Violet</td></tr>
+    </table>
+    <p>Stands are seating geography. They carry no rarity weighting, no claim weighting and no difference in rights: a West Stand seat and a North Stand seat are the same instrument wearing different colors.</p>
+
+    <h2>5 · Token phase</h2>
+    <p>A token phase is planned after the arena sells out. It is not part of the deployed collection contract, no token exists at the time of this paper, and no claim is open or scheduled. Design and timing will be published on this site before anything opens, and nothing in this paper should be read as a promise of token value.</p>
+
+    <h2>6 · House rules</h2>
+    <ul>
+      <li>Minting happens only through a user's own Binance Agentic Wallet agent. The website is read-only: it connects no wallet and executes no mint.</li>
+      <li>No seat price or fee is charged by the collection at mint. Holders pay only BNB Chain network gas through their agent.</li>
+      <li>Secondary trading happens on public marketplaces, starting with Element. The collection takes no position on seat prices.</li>
+      <li>Contract state is the source of truth. Where this paper and the contract disagree, the contract governs.</li>
+    </ul>
+
+    <h2>7 · Risks</h2>
+    <p>Seats are collectible tokens with no guaranteed utility or value. Smart contracts carry technical risk despite testing. Marketplace prices can move to zero. The token phase described in section 5 may change in design or timing, or not proceed. Read the contract on BscScan before entering; it is short, verified by its own code, and fully readable.</p>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>AGENT ARENA · agentarena.id</span>
+    <span class="addr">NFT 0xF11e9405b23CA0F53E6135162a85545D780a3737 · BNB Chain</span>
+    <span><a href="/docs/">Docs</a> · <a href="/roadmap/">Roadmap</a> · <a href="/whitepaper/">Whitepaper</a> · <a href="/arena-skill.md">Agent skill file</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Arena · One Agent, One Seat</title>
+<meta name="description" content="Agent Arena: 5,000 numbered seats on BNB Chain. Post the tweet, then your Binance agent mints your seat free. One seat per wallet, numbered in entry order, forever.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:title" content="Agent Arena · One Agent, One Seat">
+<meta property="og:description" content="5,000 numbered seats. Post, then your agent mints yours free.">
+<meta property="og:image" content="https://agentarena.id/og.png">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="strip">Doors open soon · 5,000 seats · Free through your agent</div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="/"><img src="/logo.svg" alt="Agent Arena logo">AGENT ARENA</a>
+    <nav>
+      <a href="#post">Post</a>
+      <a href="#mint">Mint</a>
+      <a href="/docs/">Docs</a>
+      <a href="/roadmap/">Roadmap</a>
+      <a href="/whitepaper/">Whitepaper</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="lights"></canvas>
+  <div class="wrap">
+    <p class="kicker">An arena for Binance agents · BNB Chain</p>
+    <h1 class="wordmark">Agent<br>Arena<span class="amp">.</span></h1>
+    <p class="tagline">One agent, one seat, numbered forever. Five thousand seats, issued in the order agents walk in. No classes, no draws, no second seat.
+      <span class="mute">Post the tweet, then your agent mints your seat free. Your number is your place in arena history.</span>
+    </p>
+    <div class="cta-row">
+      <a class="btn" href="#post">Post to enter</a>
+      <a class="btn ghost" href="#mint">Mint your seat</a>
+    </div>
+    <div class="stats-strip">
+      <div><p class="lab">Seats taken</p><p class="val" id="stat-taken">Syncing</p></div>
+      <div><p class="lab">Next seat</p><p class="val" id="stat-next">Syncing</p></div>
+      <div><p class="lab">Status</p><p class="val" id="stat-status">Syncing</p></div>
+    </div>
+    <div class="seatmap-box">
+      <div class="seatmap-head">
+        <span class="t">Live seat map · 5,000 seats</span>
+        <span id="seattip">Move across the map to inspect a seat</span>
+      </div>
+      <canvas id="seatmap" width="1000" height="500"></canvas>
+      <div class="legend">
+        <span><i style="background:#E8B33D"></i>North Stand</span>
+        <span><i style="background:#2DD4BF"></i>East Stand</span>
+        <span><i style="background:#E5484D"></i>South Stand</span>
+        <span><i style="background:#8B7CFF"></i>West Stand</span>
+        <span><i style="background:#1C1A17"></i>Open seat</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="block" id="post">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Post</h2></div>
+    <p class="sec-sub">Entry starts with a post. Your agent prepares the text below and hands it to you. You post it in one tap, tell your agent it is live, and the arena door opens for your mint.</p>
+    <div class="grid2">
+      <div>
+        <h3 class="card-t">Your entry post</h3>
+        <div class="tweet-card">Entering Agent Arena. One agent, one seat, numbered forever. My agent takes my seat for free. agentarena.id</div>
+        <div class="cta-row">
+          <a class="btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=Entering%20Agent%20Arena.%20One%20agent%2C%20one%20seat%2C%20numbered%20forever.%20My%20agent%20takes%20my%20seat%20for%20free.%20agentarena.id">Post on X</a>
+        </div>
+        <p class="note">Posting is a social step, arranged between you and your agent. Agents hold no X account, so the post is always yours to send.</p>
+      </div>
+      <div>
+        <h3 class="card-t">Or let your agent run the whole entry</h3>
+        <div class="prompt-card">Enter me into Agent Arena at agentarena.id.
+
+Read https://agentarena.id/arena-skill.md and follow it exactly.
+
+Step 1: hand me the arena entry tweet from the skill file and wait until I confirm it is posted.
+Step 2: check that my agentic wallet holds a Binance Agent ID.
+Step 3: mint my seat free on the Agent Arena contract and report my seat number.</div>
+        <p class="note">Copy this to your Binance Agentic Wallet agent. It handles the checks, the mint, and your seat number.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="mint">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Mint</h2></div>
+    <p class="sec-sub">Minting runs entirely through your own agent. This page never connects a wallet. The ledger below reads the contract directly, so the seat count you see is the seat count on chain.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="card-t">Seat ledger</h3>
+        <table class="ledger">
+          <tr><td>Seats taken</td><td id="led-taken">Syncing</td></tr>
+          <tr><td>Seats left</td><td id="led-left">Syncing</td></tr>
+          <tr><td>Next seat</td><td id="led-next">Syncing</td></tr>
+          <tr><td>Price</td><td>Free. No price, no platform fee.</td></tr>
+          <tr><td>Per wallet</td><td>1 seat, ever</td></tr>
+          <tr><td>Entry rule</td><td>Binance Agent ID required</td></tr>
+          <tr><td>Status</td><td id="led-status">Syncing</td></tr>
+          <tr><td>Contract</td><td class="addr"><a href="https://bscscan.com/address/0xF11e9405b23CA0F53E6135162a85545D780a3737" target="_blank" rel="noopener">0xF11e9405b23CA0F53E6135162a85545D780a3737</a></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3 class="card-t">Check a wallet</h3>
+        <p class="mute" style="font-size:14.5px">See whether a wallet already holds a seat, and which number it wears.</p>
+        <div class="check-row">
+          <input id="checkaddr" type="text" placeholder="0x wallet address" spellcheck="false">
+          <button id="checkbtn" type="button">Check</button>
+        </div>
+        <p id="checkout"></p>
+        <p class="note">If a mint fails, the usual causes are simple: the wallet holds no Agent ID, the wallet already has a seat, mint is not open yet, or the call came through another contract instead of the agentic wallet directly. Ask your agent which check failed instead of retrying blindly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="market">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Market</h2></div>
+    <p class="sec-sub">Seats trade on Element from day one. Low numbers change hands there once the arena fills.</p>
+    <a class="btn ghost" href="https://element.market/collections/agentarena" target="_blank" rel="noopener">Trade on Element</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>AGENT ARENA · agentarena.id</span>
+    <span class="addr">NFT 0xF11e9405b23CA0F53E6135162a85545D780a3737 · BNB Chain</span>
+    <span><a href="/docs/">Docs</a> · <a href="/roadmap/">Roadmap</a> · <a href="/whitepaper/">Whitepaper</a> · <a href="/arena-skill.md">Agent skill file</a></span>
+  </div>
+</footer>
+
+<script src="/js/chain.js"></script>
+</body>
+</html>
