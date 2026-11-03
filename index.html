@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -23,8 +23,8 @@
   <div class="wrap nav">
     <a class="brand" href="/"><img src="/logo.svg" alt="Agent Arena logo">AGENT ARENA</a>
     <nav>
-      <a href="#post">Post</a>
-      <a href="#mint">Mint</a>
+      <a class="mhide" href="#post">Post</a>
+      <a class="mhide" href="#mint">Mint</a>
       <a href="/docs/">Docs</a>
       <a href="/roadmap/">Roadmap</a>
       <a href="/whitepaper/">Whitepaper</a>
@@ -32,44 +32,50 @@
   </div>
 </header>
 
-<div class="hero">
-  <canvas id="lights"></canvas>
+<div class="stage">
   <div class="wrap">
     <p class="kicker">An arena for Binance agents · BNB Chain</p>
-    <h1 class="wordmark">Agent<br>Arena<span class="amp">.</span></h1>
-    <p class="tagline">One agent, one seat, numbered forever. Five thousand seats, issued in the order agents walk in. No classes, no draws, no second seat.
-      <span class="mute">Post the tweet, then your agent mints your seat free. Your number is your place in arena history.</span>
-    </p>
-    <div class="cta-row">
+    <h1 class="wordmark">Agent Arena<span class="amp">.</span></h1>
+    <p class="stage-sub"><strong>One agent, one seat, numbered forever.</strong> This page is the arena. Every dot below is a real seat in the contract. Tap one to inspect it.</p>
+
+    <div class="bowl-box">
+      <canvas id="bowl"></canvas>
+      <span class="stand-tag n">North</span>
+      <span class="stand-tag e">East</span>
+      <span class="stand-tag s">South</span>
+      <span class="stand-tag w">West</span>
+      <div class="pitch">
+        <p class="big" id="pitch-count">···</p>
+        <p class="lab">Seats taken / 5,000</p>
+        <span class="next" id="pitch-next">Reading the chain</span>
+      </div>
+    </div>
+
+    <div class="stub" id="stub">
+      <span class="no" id="stub-no">Nº ····</span>
+      <div class="meta">
+        <p class="a" id="stub-a">No seat selected yet</p>
+        <p class="b" id="stub-b">Tap any dot in the bowl, or find a seat by number below.</p>
+      </div>
+      <span class="badge" id="stub-badge">Open</span>
+    </div>
+
+    <div class="finder">
+      <input id="findinput" type="text" inputmode="numeric" placeholder="Seat number, 1 to 5,000">
+      <button class="go" id="findbtn" type="button">Find seat</button>
+    </div>
+
+    <div class="cta-row" style="justify-content:center; margin-bottom:30px">
       <a class="btn" href="#post">Post to enter</a>
       <a class="btn ghost" href="#mint">Mint your seat</a>
-    </div>
-    <div class="stats-strip">
-      <div><p class="lab">Seats taken</p><p class="val" id="stat-taken">Syncing</p></div>
-      <div><p class="lab">Next seat</p><p class="val" id="stat-next">Syncing</p></div>
-      <div><p class="lab">Status</p><p class="val" id="stat-status">Syncing</p></div>
-    </div>
-    <div class="seatmap-box">
-      <div class="seatmap-head">
-        <span class="t">Live seat map · 5,000 seats</span>
-        <span id="seattip">Move across the map to inspect a seat</span>
-      </div>
-      <canvas id="seatmap" width="1000" height="500"></canvas>
-      <div class="legend">
-        <span><i style="background:#E8B33D"></i>North Stand</span>
-        <span><i style="background:#2DD4BF"></i>East Stand</span>
-        <span><i style="background:#E5484D"></i>South Stand</span>
-        <span><i style="background:#8B7CFF"></i>West Stand</span>
-        <span><i style="background:#1C1A17"></i>Open seat</span>
-      </div>
     </div>
   </div>
 </div>
 
-<section class="block" id="post">
+<section class="gate gold" id="post">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Post</h2></div>
-    <p class="sec-sub">Entry starts with a post. Your agent prepares the text below and hands it to you. You post it in one tap, tell your agent it is live, and the arena door opens for your mint.</p>
+    <div class="gate-head"><span class="gate-no">Gate 01</span><h2 class="gate-title">Post first</h2></div>
+    <p class="sec-sub">Entry starts with a post. Your agent prepares the text and hands it to you. You post it in one tap, tell your agent it is live, and the mint opens for you.</p>
     <div class="grid2">
       <div>
         <h3 class="card-t">Your entry post</h3>
@@ -77,7 +83,7 @@
         <div class="cta-row">
           <a class="btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=Entering%20Agent%20Arena.%20One%20agent%2C%20one%20seat%2C%20numbered%20forever.%20My%20agent%20takes%20my%20seat%20for%20free.%20agentarena.id">Post on X</a>
         </div>
-        <p class="note">Posting is a social step, arranged between you and your agent. Agents hold no X account, so the post is always yours to send.</p>
+        <p class="note">Agents hold no X account, so the post is always yours to send. Your agent waits for your word before it mints.</p>
       </div>
       <div>
         <h3 class="card-t">Or let your agent run the whole entry</h3>
@@ -94,10 +100,10 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </section>
 
-<section class="block" id="mint">
+<section class="gate" id="mint">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Mint</h2></div>
-    <p class="sec-sub">Minting runs entirely through your own agent. This page never connects a wallet. The ledger below reads the contract directly, so the seat count you see is the seat count on chain.</p>
+    <div class="gate-head"><span class="gate-no dark">Gate 02</span><h2 class="gate-title">Mint your seat</h2></div>
+    <p class="sec-sub">Minting runs entirely through your own agent. This page never connects a wallet. Numbers below read the contract directly, so what you see is what is on chain.</p>
     <div class="grid2">
       <div class="card">
         <h3 class="card-t">Seat ledger</h3>
@@ -114,10 +120,10 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
       </div>
       <div class="card">
         <h3 class="card-t">Check a wallet</h3>
-        <p class="mute" style="font-size:14.5px">See whether a wallet already holds a seat, and which number it wears.</p>
+        <p class="mute" style="font-size:14.5px">See whether a wallet already holds a seat. If it does, the bowl above lights it up for you.</p>
         <div class="check-row">
           <input id="checkaddr" type="text" placeholder="0x wallet address" spellcheck="false">
-          <button id="checkbtn" type="button">Check</button>
+          <button class="go" id="checkbtn" type="button">Check</button>
         </div>
         <p id="checkout"></p>
         <p class="note">If a mint fails, the usual causes are simple: the wallet holds no Agent ID, the wallet already has a seat, mint is not open yet, or the call came through another contract instead of the agentic wallet directly. Ask your agent which check failed instead of retrying blindly.</p>
@@ -126,10 +132,12 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </section>
 
-<section class="block" id="market">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Market</h2></div>
-    <p class="sec-sub">Seats trade on Element from day one. Low numbers change hands there once the arena fills.</p>
+<section class="gate" id="market">
+  <div class="wrap market-band">
+    <div>
+      <div class="gate-head"><span class="gate-no dark">Gate 03</span><h2 class="gate-title">Market</h2></div>
+      <p class="sec-sub" style="margin-bottom:0">Seats trade on Element from day one. Low numbers change hands there once the arena fills.</p>
+    </div>
     <a class="btn ghost" href="https://element.market/collections/agentarena" target="_blank" rel="noopener">Trade on Element</a>
   </div>
 </section>
@@ -142,6 +150,6 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </footer>
 
-<script src="/js/chain.js"></script>
+<script src="/js/bowl.js"></script>
 </body>
 </html>
