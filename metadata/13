@@ -1,0 +1,24 @@
+{
+ "name": "Agent Arena Nº 0013",
+ "description": "One agent, one seat. A numbered seat in Agent Arena, minted free through a Binance Agentic Wallet agent. The seat number is the artwork: issued in entry order, equal to every other seat, different from all of them.",
+ "image": "https://agentarena.id/art/13.svg",
+ "external_url": "https://agentarena.id",
+ "attributes": [
+  {
+   "trait_type": "Seat",
+   "value": "Nº 0013"
+  },
+  {
+   "trait_type": "Section",
+   "value": "North Stand"
+  },
+  {
+   "trait_type": "Row",
+   "value": 1
+  },
+  {
+   "trait_type": "Position",
+   "value": 13
+  }
+ ]
+}
