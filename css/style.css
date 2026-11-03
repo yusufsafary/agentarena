@@ -135,3 +135,59 @@ footer.site { padding: 40px 0 52px; }
   .nav nav a.mhide { display: none; }
   .brand { font-size: 13.5px; }
 }
+
+/* ---- v3 lower sections: big screen, turnstiles, scoreboard, receipt, ticker ---- */
+.ledboard { position: relative; border: 2px solid var(--gold); border-radius: 16px; background: #0d0a05; padding: 22px 20px; overflow: hidden; }
+.ledboard::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(232,179,61,0.13) 1px, transparent 1.4px); background-size: 7px 7px; }
+.ledboard::after { content: ""; position: absolute; top: 0; bottom: 0; width: 90px; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255,220,130,0.10), transparent); animation: ledshine 5.5s ease-in-out infinite; }
+@keyframes ledshine { 0% { left: -120px; } 55%, 100% { left: 110%; } }
+.led-tag { position: relative; font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em; color: var(--gold); text-transform: uppercase; }
+.led-text { position: relative; font-family: var(--anton); font-size: clamp(21px, 5.6vw, 34px); line-height: 1.35; color: #ffd35c; text-shadow: 0 0 18px rgba(232,179,61,0.45); margin-top: 12px; }
+.led-row { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 18px; }
+.btn.light { background: var(--bone); box-shadow: 0 4px 0 #8d8574; color: #171106; }
+.btn.light:active { box-shadow: 0 1px 0 #8d8574; }
+.led-note { font-family: var(--mono); font-size: 12.5px; color: var(--mute); }
+
+.tsteps { margin-top: 26px; position: relative; }
+.tsteps::before { content: ""; position: absolute; left: 26px; top: 14px; bottom: 14px; border-left: 2px dashed #4a4234; }
+.tstep { position: relative; display: flex; gap: 16px; padding: 12px 0; align-items: flex-start; }
+.tstep .tn { flex: none; width: 54px; height: 54px; border-radius: 14px; background: var(--panel2); border: 1.5px solid var(--gold); color: var(--gold); font-family: var(--anton); font-size: 22px; display: flex; align-items: center; justify-content: center; transform: rotate(-3deg); z-index: 1; }
+.tstep:nth-child(2) .tn { transform: rotate(2.5deg); }
+.tstep h4 { font-family: var(--anton); font-size: 18px; text-transform: uppercase; letter-spacing: 0.01em; padding-top: 3px; }
+.tstep p { color: var(--mute); font-size: 14.5px; max-width: 520px; }
+details.promptfold { margin-top: 22px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+details.promptfold summary { cursor: pointer; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mute); padding: 15px 18px; }
+details.promptfold summary:hover { color: var(--gold); }
+details.promptfold .prompt-card { margin: 0 14px 14px; }
+
+.scoreboard { position: relative; border: 1.5px solid #3a342a; border-radius: 16px; background: #070605; padding: 18px; overflow: hidden; }
+.scoreboard::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 4px); }
+.sb-head { position: relative; display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.26em; color: var(--mute); text-transform: uppercase; }
+.sb-dot { width: 9px; height: 9px; border-radius: 50%; background: #7ee787; box-shadow: 0 0 10px #7ee787; animation: sbpulse 1.6s ease-in-out infinite; }
+@keyframes sbpulse { 50% { opacity: 0.35; } }
+.sb-grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; margin-top: 16px; }
+@media (min-width: 720px) { .sb-grid { grid-template-columns: repeat(4, 1fr); } }
+.sb-lab { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--mute); text-transform: uppercase; }
+.sb-val { font-family: var(--mono); font-weight: 600; font-size: clamp(26px, 6.4vw, 40px); color: #ffc44d; text-shadow: 0 0 16px rgba(255,196,77,0.4); line-height: 1.15; }
+.sb-val.small { font-size: clamp(17px, 4.6vw, 24px); padding-top: 8px; }
+.sb-foot { position: relative; display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; padding-top: 14px; border-top: 1px dashed #3a342a; font-family: var(--mono); font-size: 12px; color: var(--mute); }
+
+.scan-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+@media (min-width: 860px) { .scan-grid { grid-template-columns: 1.2fr 1fr; } }
+.receipt { margin-top: 16px; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 16px; position: relative; }
+.receipt::before { content: ""; position: absolute; left: 0; right: 0; top: -6px; height: 12px;
+  background: radial-gradient(circle at 8px 6px, transparent 5px, var(--panel2) 5.5px); background-size: 18px 12px; }
+.barcode { margin-top: 14px; height: 34px; border-radius: 4px; background: repeating-linear-gradient(90deg, var(--bone) 0 2px, transparent 2px 5px, var(--bone) 5px 6px, transparent 6px 11px, var(--bone) 11px 14px, transparent 14px 17px); opacity: 0.85; }
+.contract-big { font-family: var(--mono); font-size: 14.5px; line-height: 1.8; word-break: break-all; background: #0d0b09; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+
+.ticker { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 14px 0; margin: 4px 0 22px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.ticker-track { display: flex; gap: 10px; width: max-content; animation: tick 36s linear infinite; }
+@keyframes tick { to { transform: translateX(-50%); } }
+.chip { flex: none; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; border: 1px solid var(--line); border-radius: 99px; padding: 8px 14px; color: var(--mute); background: var(--panel); }
+.chip b { color: var(--bone); font-weight: 600; }
+.chip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+
+.giant { font-family: var(--anton); font-size: clamp(44px, 12.4vw, 150px); line-height: 0.95; text-align: center; color: transparent; -webkit-text-stroke: 1.5px #35301f; text-transform: uppercase; white-space: nowrap; overflow: hidden; user-select: none; }
