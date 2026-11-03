@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agent Arena · One Agent, One Seat</title>
 <meta name="description" content="Agent Arena: 5,000 numbered seats on BNB Chain. Post the tweet, then your Binance agent mints your seat free. One seat per wallet, numbered in entry order, forever.">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
 <meta property="og:title" content="Agent Arena · One Agent, One Seat">
 <meta property="og:description" content="5,000 numbered seats. Post, then your agent mints yours free.">
 <meta property="og:image" content="https://agentarena.id/og.png">
@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=3">
+<link rel="stylesheet" href="/css/style.css?v=4">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
 
 <header class="site">
   <div class="wrap nav">
-    <a class="brand" href="/"><img src="/logo.svg" alt="Agent Arena logo">AGENT ARENA</a>
+    <a class="brand" href="/"><img src="/logo.svg?v=2" alt="Agent Arena logo">AGENT ARENA</a>
     <nav>
       <a class="mhide" href="#post">Post</a>
       <a class="mhide" href="#mint">Mint</a>
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    <div class="stub" id="stub">
+    <div class="stub rv" id="stub">
       <span class="no" id="stub-no">Nº ····</span>
       <div class="meta">
         <p class="a" id="stub-a">No seat selected yet</p>
@@ -76,7 +76,7 @@
   <div class="wrap">
     <div class="gate-head"><span class="gate-no">Gate 01</span><h2 class="gate-title">Post first</h2></div>
     <p class="sec-sub">Entry starts on the big screen. Your agent prepares the post, you send it, and only then does the mint begin.</p>
-    <div class="ledboard">
+    <div class="ledboard rv">
       <p class="led-tag">On the big screen · your entry post</p>
       <p class="led-text">Entering Agent Arena. One agent, one seat, numbered forever. My agent takes my seat for free. agentarena.id</p>
       <div class="led-row">
@@ -84,12 +84,12 @@
         <span class="led-note">One tap. Your agent waits for your word before it mints.</span>
       </div>
     </div>
-    <div class="tsteps">
+    <div class="tsteps rv">
       <div class="tstep"><span class="tn">1</span><div><h4>Post it</h4><p>You send the entry post from your own X account. Agents hold no X account, so this step is always yours.</p></div></div>
       <div class="tstep"><span class="tn">2</span><div><h4>Agent checks</h4><p>Your agent reads the arena skill file, confirms your wallet holds a Binance Agent ID, and waits for your go.</p></div></div>
       <div class="tstep"><span class="tn">3</span><div><h4>Seat is yours</h4><p>The mint lands, the bowl above lights your seat, and the number stays yours forever.</p></div></div>
     </div>
-    <details class="promptfold">
+    <details class="promptfold rv">
       <summary>Or hand the whole entry to your agent · copy the prompt</summary>
       <div class="prompt-card">Enter me into Agent Arena at agentarena.id.
 
@@ -107,7 +107,7 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   <div class="wrap">
     <div class="gate-head"><span class="gate-no dark">Gate 02</span><h2 class="gate-title">Mint your seat</h2></div>
     <p class="sec-sub">Minting runs entirely through your own agent. This page never connects a wallet. The scoreboard below reads the contract directly, so what you see is what is on chain.</p>
-    <div class="scoreboard">
+    <div class="scoreboard rv">
       <div class="sb-head"><span class="sb-dot"></span><span>Live from the contract</span></div>
       <div class="sb-grid">
         <div><p class="sb-lab">Seats taken</p><p class="sb-val" id="led-taken">···</p></div>
@@ -117,7 +117,7 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
       </div>
       <div class="sb-foot"><span>Price: free. No price, no platform fee.</span><span>1 seat per wallet, ever</span><span>Binance Agent ID required</span></div>
     </div>
-    <div class="scan-grid">
+    <div class="scan-grid rv">
       <div class="card">
         <h3 class="card-t">Scan a wallet</h3>
         <p class="mute" style="font-size:14.5px">Paste a wallet and get its ticket receipt. A holder's seat lights up in the bowl above.</p>
@@ -149,7 +149,7 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
     <div class="gate-head"><span class="gate-no dark">Gate 03</span><h2 class="gate-title">Transfer window</h2></div>
     <p class="sec-sub">Seats change hands on Element from day one. Every chip on the wire is a real seat position in this arena.</p>
   </div>
-  <div class="ticker"><div class="ticker-track">
+  <div class="ticker rv"><div class="ticker-track">
     <span class="chip"><i style="background:#E8B33D"></i><b>Nº 0001</b> · NORTH</span>
     <span class="chip"><i style="background:#E8B33D"></i><b>Nº 0777</b> · NORTH</span>
     <span class="chip"><i style="background:#E8B33D"></i><b>Nº 1250</b> · NORTH</span>
@@ -183,6 +183,6 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </footer>
 
-<script src="/js/bowl.js?v=2"></script>
+<script src="/js/bowl.js?v=3"></script>
 </body>
 </html>

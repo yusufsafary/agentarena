@@ -191,3 +191,23 @@ details.promptfold .prompt-card { margin: 0 14px 14px; }
 .chip i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
 
 .giant { font-family: var(--anton); font-size: clamp(44px, 12.4vw, 150px); line-height: 0.95; text-align: center; color: transparent; -webkit-text-stroke: 1.5px #35301f; text-transform: uppercase; white-space: nowrap; overflow: hidden; user-select: none; }
+
+/* ---- v4 motion: scroll reveal, stub pop, scoreboard bump, sheens ---- */
+.rv { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.rv.in { opacity: 1; transform: none; }
+@keyframes stubpop { 0% { transform: scale(0.97); } 55% { transform: scale(1.015); } 100% { transform: scale(1); } }
+.stub.pop { animation: stubpop 0.35s ease; }
+@keyframes sbbump { 0% { text-shadow: 0 0 34px rgba(255,196,77,0.95); } 100% { text-shadow: 0 0 16px rgba(255,196,77,0.4); } }
+.sb-val.bump { animation: sbbump 0.7s ease; }
+.btn { position: relative; overflow: hidden; }
+.btn::after { content: ""; position: absolute; top: 0; bottom: 0; width: 46px; left: -70px; transform: skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); transition: left 0.55s ease; }
+.btn:hover::after { left: 115%; }
+.giant { background: linear-gradient(100deg, rgba(232,179,61,0) 42%, rgba(232,179,61,0.30) 50%, rgba(232,179,61,0) 58%);
+  background-size: 280% 100%; -webkit-background-clip: text; background-clip: text; animation: giantshine 7s ease-in-out infinite; }
+@keyframes giantshine { 0% { background-position: 120% 0; } 55%, 100% { background-position: -80% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .stage::after, .ledboard::after, .sb-dot, .giant { animation: none !important; }
+  .rv { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}

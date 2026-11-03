@@ -80,6 +80,18 @@ let state = { minted: 0, open: false, known: false };
 let selected = null;
 let pulse = null; // {n, t0}
 let flashes = []; // seat numbers flashing after a fresh mint
+let twinkles = []; // ambient seat sparkles {n, t0}
+let dispShown = null; // number currently displayed (count-up tween)
+let frameOn = false;
+const RM = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function frame(now) {
+  draw(now);
+  twinkles = twinkles.filter((t) => now - t.t0 < 1300);
+  if (pulse || twinkles.length) requestAnimationFrame(frame);
+  else frameOn = false;
+}
+function kick() { if (!frameOn) { frameOn = true; requestAnimationFrame(frame); } }
 
 function sizeCanvas() {
   const r = cv.getBoundingClientRect();
@@ -109,6 +121,15 @@ function draw(now) {
     ctx.fillStyle = flashSet.has(n) ? "#FFFFFF" : taken ? STANDS[s].color : "#23201A";
     ctx.fill();
   }
+  for (const t of twinkles) {
+    const age = (now - t.t0) / 1300;
+    if (age >= 1) continue;
+    const { x, y } = seatPos(t.n, W, H);
+    ctx.beginPath();
+    ctx.arc(x, y, dotR * 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(244,239,227," + (0.5 * (1 - age)).toFixed(3) + ")";
+    ctx.fill();
+  }
   if (selected) {
     const { x, y } = seatPos(selected, W, H);
     ctx.beginPath();
@@ -127,7 +148,6 @@ function draw(now) {
       ctx.strokeStyle = "rgba(244,239,227," + (0.85 * (1 - age)).toFixed(3) + ")";
       ctx.lineWidth = Math.max(1.4, W / 480);
       ctx.stroke();
-      requestAnimationFrame(draw);
     }
   }
 }
@@ -136,10 +156,19 @@ function paint() {
   const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   if (!state.known) return;
   const m = state.minted;
-  set("pitch-count", fmt(m));
+  const setNums = (v) => { set("pitch-count", fmt(v)); set("led-taken", fmt(v)); set("led-left", fmt(MAX - v)); };
+  if (dispShown === null || RM || dispShown === m) { setNums(m); dispShown = m; }
+  else {
+    document.querySelectorAll(".sb-val").forEach((e) => { e.classList.remove("bump"); void e.offsetWidth; e.classList.add("bump"); });
+    const from = dispShown, t0 = performance.now();
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / 750);
+      setNums(Math.round(from + (m - from) * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) requestAnimationFrame(step); else dispShown = m;
+    };
+    requestAnimationFrame(step);
+  }
   set("pitch-next", state.open ? (m >= MAX ? "ARENA FULL" : "NEXT SEAT · Nº " + pad4(m + 1)) : "DOORS OPENING SOON");
-  set("led-taken", fmt(m));
-  set("led-left", fmt(MAX - m));
   set("led-next", m >= MAX ? "None" : "Nº " + pad4(m + 1));
   set("led-status", state.open ? "Live" : "Opening soon");
   draw(performance.now());
@@ -160,8 +189,10 @@ function selectSeat(n, withPulse) {
     badge.textContent = taken ? "Taken" : "Open";
     badge.className = "badge" + (taken ? " taken" : "");
   }
+  const stub = document.getElementById("stub");
+  if (stub) { stub.classList.remove("pop"); void stub.offsetWidth; stub.classList.add("pop"); }
   draw(performance.now());
-  if (withPulse) requestAnimationFrame(draw);
+  kick();
 }
 
 async function refresh() {
@@ -231,3 +262,26 @@ sizeCanvas();
 draw(performance.now());
 refresh();
 setInterval(refresh, 30000);
+
+// Ambient life: random open seats sparkle like phone lights in the stands.
+if (!RM) {
+  setInterval(() => {
+    if (document.hidden) return;
+    for (let i = 0; i < 10; i++) {
+      const n = 1 + Math.floor(Math.random() * MAX);
+      if (state.known && n <= state.minted) continue;
+      twinkles.push({ n, t0: performance.now() });
+    }
+    kick();
+  }, 900);
+}
+
+// Scroll reveal for the lower sections.
+if ("IntersectionObserver" in window && !RM) {
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".rv").forEach((el) => io.observe(el));
+} else {
+  document.querySelectorAll(".rv").forEach((el) => el.classList.add("in"));
+}
