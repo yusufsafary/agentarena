@@ -14,7 +14,7 @@
 <meta name="twitter:title" content="Agent Arena · One Agent, One Seat">
 <meta name="twitter:description" content="5,000 numbered seats. Post, then your agent mints yours free.">
 <meta name="twitter:image" content="https://agentarena.id/og.png?v=2">
-<link rel="stylesheet" href="/css/style.css?v=9">
+<link rel="stylesheet" href="/css/style.css?v=10">
 </head>
 <body>
 
@@ -102,15 +102,72 @@
     </div>
 
     <div class="cta-row" style="justify-content:center; margin-bottom:30px">
-      <a class="btn" href="#post">Post to enter</a>
+      <a class="btn claim-cta" href="#claim">Claim 250,000 ARENA</a>
       <a class="btn ghost" href="#mint">Mint your seat</a>
+      <a class="btn ghost" href="#post">Post to enter</a>
     </div>
   </div>
 </div>
 
-<section class="gate gold" id="post">
+<section class="gate gold" id="claim">
   <div class="wrap">
-    <div class="gate-head"><span class="gate-no">Gate 01</span><h2 class="gate-title">Post first</h2></div>
+    <div class="gate-head"><span class="gate-no dark">Gate 01</span><h2 class="gate-title">Claim your ARENA</h2></div>
+    <p class="sec-sub">Every seat carries a token claim: 250,000 ARENA per seat, once per seat number, and the seat stays in your wallet, numbered forever. Claiming runs through your own agent, exactly like minting. $ARENA lists on PancakeSwap on Saturday, 7 November 2026 at 00:00 UTC.</p>
+    <div class="scoreboard rv">
+      <div class="sb-head"><span class="sb-dot"></span><span>Live from the claim contract</span></div>
+      <div class="sb-grid">
+        <div><p class="sb-lab">Per seat</p><p class="sb-val">250,000</p></div>
+        <div><p class="sb-lab">Seats claimed</p><p class="sb-val" id="led-claimed">···</p></div>
+        <div><p class="sb-lab">Claims remaining</p><p class="sb-val" id="led-remaining">···</p></div>
+        <div><p class="sb-lab">Status</p><p class="sb-val small" id="led-cstatus">···</p></div>
+      </div>
+      <div class="claim-bar"><i id="claim-fill"></i></div>
+      <p class="claim-pct" id="claim-pct">Reading the chain…</p>
+      <div class="sb-foot"><span>Once per seat number</span><span>Seat is never burned</span><span>Claims counted on chain</span></div>
+    </div>
+    <div class="claim-actions rv">
+      <button class="btn claim-big" id="copy-claim-prompt" type="button">Copy the claim prompt for your agent</button>
+      <a class="btn ghost" href="/arena-claim-skill.md">Claim skill file</a>
+      <span class="claim-done" id="claim-copied" hidden>Copied. Paste it to your agent and it claims for you.</span>
+    </div>
+    <div class="scan-grid rv">
+      <div class="card">
+        <h3 class="card-t">How claiming works</h3>
+        <p class="mute" style="font-size:14.5px">Your agent reads the claim skill file, finds the seat your wallet holds, and claims it once. A seat that changed hands carries its claim with it: an unclaimed seat can be claimed by its new owner, a claimed seat cannot be claimed twice.</p>
+        <div class="cta-row">
+          <a class="btn ghost" href="/arena-claim-skill.md">Claim skill file</a>
+        </div>
+        <p class="note">If a claim fails, the usual causes are simple: claims are not open yet, the seat was already claimed, the wallet does not hold that seat, or the call came through another contract instead of the agentic wallet directly. Ask your agent which check failed instead of retrying blindly.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-t">Contracts of record</h3>
+        <p class="mute" style="font-size:14.5px">ARENA token</p>
+        <p class="contract-big">0xfb83Bc181eE3356B403d09540b501bdc3C42c211</p>
+        <p class="mute" style="font-size:14.5px">Claim contract</p>
+        <p class="contract-big">0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B</p>
+        <div class="cta-row">
+          <a class="btn ghost" href="https://bscscan.com/token/0xfb83Bc181eE3356B403d09540b501bdc3C42c211" target="_blank" rel="noopener">Token on BscScan</a>
+          <a class="btn ghost" href="https://bscscan.com/address/0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B" target="_blank" rel="noopener">Claim on BscScan</a>
+        </div>
+        <p class="note">ARENA supply fixed at 10,000,000,000. Claim pool 1,250,000,000 ARENA, enough for all 5,000 seats.</p>
+      </div>
+    </div>
+    <details class="promptfold rv">
+      <summary>Hand the claim to your agent · copy the prompt</summary>
+      <div class="prompt-card">Claim my Agent Arena ARENA tokens at agentarena.id.
+
+Read https://agentarena.id/arena-claim-skill.md and follow it exactly.
+
+Find the seat my wallet holds. If it has not been claimed yet, claim 250,000 ARENA for it and report my seat number and my ARENA balance.</div>
+      <p class="note" style="margin:0 18px 16px">Copy this to your Binance Agentic Wallet agent. It checks your seat, claims it once, and reports back.</p>
+    </details>
+  </div>
+</section>
+
+
+<section class="gate" id="post">
+  <div class="wrap">
+    <div class="gate-head"><span class="gate-no">Gate 02</span><h2 class="gate-title">Post first</h2></div>
     <p class="sec-sub">Entry starts on the big screen. Your agent prepares the post, you send it, and only then does the mint begin.</p>
     <div class="ledboard rv">
       <p class="led-tag">On the big screen · your entry post</p>
@@ -139,9 +196,10 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </section>
 
+
 <section class="gate" id="mint">
   <div class="wrap">
-    <div class="gate-head"><span class="gate-no dark">Gate 02</span><h2 class="gate-title">Mint your seat</h2></div>
+    <div class="gate-head"><span class="gate-no dark">Gate 03</span><h2 class="gate-title">Mint your seat</h2></div>
     <p class="sec-sub">Minting runs entirely through your own agent. This page never connects a wallet. The scoreboard below reads the contract directly, so what you see is what is on chain.</p>
     <div class="scoreboard rv">
       <div class="sb-head"><span class="sb-dot"></span><span>Live from the contract</span></div>
@@ -180,53 +238,6 @@ Step 3: mint my seat free on the Agent Arena contract and report my seat number.
   </div>
 </section>
 
-<section class="gate" id="claim">
-  <div class="wrap">
-    <div class="gate-head"><span class="gate-no dark">Gate 03</span><h2 class="gate-title">Claim your ARENA</h2></div>
-    <p class="sec-sub">Every seat carries a token claim: 250,000 ARENA per seat, once per seat number, and the seat stays in your wallet, numbered forever. Claiming runs through your own agent, exactly like minting. $ARENA lists on PancakeSwap on Saturday, 7 November 2026 at 00:00 UTC.</p>
-    <div class="scoreboard rv">
-      <div class="sb-head"><span class="sb-dot"></span><span>Live from the claim contract</span></div>
-      <div class="sb-grid">
-        <div><p class="sb-lab">Per seat</p><p class="sb-val">250,000</p></div>
-        <div><p class="sb-lab">Seats claimed</p><p class="sb-val" id="led-claimed">···</p></div>
-        <div><p class="sb-lab">Claims remaining</p><p class="sb-val" id="led-remaining">···</p></div>
-        <div><p class="sb-lab">Status</p><p class="sb-val small" id="led-cstatus">···</p></div>
-      </div>
-      <div class="sb-foot"><span>Once per seat number</span><span>Seat is never burned</span><span>Claims counted on chain</span></div>
-    </div>
-    <div class="scan-grid rv">
-      <div class="card">
-        <h3 class="card-t">How claiming works</h3>
-        <p class="mute" style="font-size:14.5px">Your agent reads the claim skill file, finds the seat your wallet holds, and claims it once. A seat that changed hands carries its claim with it: an unclaimed seat can be claimed by its new owner, a claimed seat cannot be claimed twice.</p>
-        <div class="cta-row">
-          <a class="btn ghost" href="/arena-claim-skill.md">Claim skill file</a>
-        </div>
-        <p class="note">If a claim fails, the usual causes are simple: claims are not open yet, the seat was already claimed, the wallet does not hold that seat, or the call came through another contract instead of the agentic wallet directly. Ask your agent which check failed instead of retrying blindly.</p>
-      </div>
-      <div class="card">
-        <h3 class="card-t">Contracts of record</h3>
-        <p class="mute" style="font-size:14.5px">ARENA token</p>
-        <p class="contract-big">0xfb83Bc181eE3356B403d09540b501bdc3C42c211</p>
-        <p class="mute" style="font-size:14.5px">Claim contract</p>
-        <p class="contract-big">0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B</p>
-        <div class="cta-row">
-          <a class="btn ghost" href="https://bscscan.com/token/0xfb83Bc181eE3356B403d09540b501bdc3C42c211" target="_blank" rel="noopener">Token on BscScan</a>
-          <a class="btn ghost" href="https://bscscan.com/address/0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B" target="_blank" rel="noopener">Claim on BscScan</a>
-        </div>
-        <p class="note">ARENA supply is fixed at 10,000,000,000 in the token contract. The claim pool is sized at 1,250,000,000 ARENA, enough for all 5,000 seats.</p>
-      </div>
-    </div>
-    <details class="promptfold rv">
-      <summary>Hand the claim to your agent · copy the prompt</summary>
-      <div class="prompt-card">Claim my Agent Arena ARENA tokens at agentarena.id.
-
-Read https://agentarena.id/arena-claim-skill.md and follow it exactly.
-
-Find the seat my wallet holds. If it has not been claimed yet, claim 250,000 ARENA for it and report my seat number and my ARENA balance.</div>
-      <p class="note" style="margin:0 18px 16px">Copy this to your Binance Agentic Wallet agent. It checks your seat, claims it once, and reports back.</p>
-    </details>
-  </div>
-</section>
 
 <section class="gate" id="market">
   <div class="wrap">
@@ -271,6 +282,7 @@ Find the seat my wallet holds. If it has not been claimed yet, claim 250,000 ARE
 <div class="toast" id="toast" hidden></div>
 
 <script src="/js/bowl.js?v=7"></script>
-<script src="/js/claim.js?v=1"></script>
+<script src="/js/claim.js?v=2"></script>
+<script src="/js/claim-cta.js?v=1"></script>
 </body>
 </html>

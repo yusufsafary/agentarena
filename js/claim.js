@@ -1,5 +1,5 @@
-// Agent Arena · papan klaim ARENA. Membaca kontrak ArenaClaim langsung
-// dari rantai (balapan beberapa RPC, pola yang sama dengan bowl.js).
+// Agent Arena · papan klaim ARENA v2. Angka bergerak (count-up), sel berkedip
+// saat berubah, bar progres klaim, auto-refresh 30 detik.
 (function () {
   var CLAIM = "0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B";
   var RPCS = [
@@ -23,15 +23,47 @@
   }
   var readChain = function (to, data) { return Promise.any(RPCS.map(function (u) { return rpcCall(u, to, data); })); };
   var fmt = function (n) { return n.toLocaleString("en-US"); };
-  var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
-
+  var cur = {};
+  var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
+  function tween(el, from, to) {
+    if (from === to || from == null) { el.textContent = fmt(to); return; }
+    var t0 = performance.now(), D = 900;
+    (function step(t) {
+      var p = Math.min(1, (t - t0) / D);
+      el.textContent = fmt(Math.round(from + (to - from) * ease(p)));
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  function setNum(id, v) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var from = cur[id];
+    if (from != null && from !== v) {
+      var cell = el.closest("div");
+      if (cell) { cell.classList.remove("flash"); void cell.offsetWidth; cell.classList.add("flash"); }
+    }
+    cur[id] = v;
+    tween(el, from, v);
+  }
   function refresh() {
-    readChain(CLAIM, "0xd54ad2a1").then(function (r) { set("led-claimed", fmt(parseInt(r, 16))); }).catch(function () {});
-    readChain(CLAIM, "0x754c463f").then(function (r) { set("led-remaining", fmt(parseInt(r, 16))); }).catch(function () {});
-    readChain(CLAIM, "0x4b8bcb58").then(function (r) { set("led-cstatus", parseInt(r, 16) === 1 ? "Open" : "Opens soon"); }).catch(function () {});
+    readChain(CLAIM, "0xd54ad2a1").then(function (r) {
+      var claimed = parseInt(r, 16);
+      setNum("led-claimed", claimed);
+      var bar = document.getElementById("claim-fill");
+      if (bar) bar.style.width = (claimed / 5000 * 100).toFixed(1) + "%";
+      var per = document.getElementById("claim-pct");
+      if (per) per.textContent = (claimed / 5000 * 100).toFixed(1) + "% of seats claimed";
+      window.ARENA = { claimed: claimed };
+      document.dispatchEvent(new CustomEvent("arena:claims", { detail: { claimed: claimed } }));
+    }).catch(function () {});
+    readChain(CLAIM, "0x754c463f").then(function (r) { setNum("led-remaining", parseInt(r, 16)); }).catch(function () {});
+    readChain(CLAIM, "0x4b8bcb58").then(function (r) {
+      var el = document.getElementById("led-cstatus");
+      if (el) el.textContent = parseInt(r, 16) === 1 ? "Open now" : "Opens soon";
+    }).catch(function () {});
   }
   if (document.getElementById("led-claimed")) {
     refresh();
-    setInterval(refresh, 60000);
+    setInterval(refresh, 30000);
   }
 })();
