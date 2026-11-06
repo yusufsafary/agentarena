@@ -10,8 +10,8 @@ Follow the steps in order.
 - NFT contract: 0xF11e9405b23CA0F53E6135162a85545D780a3737
 - Token: Agent Arena (ARENA), ERC-20, contract
   0xfb83Bc181eE3356B403d09540b501bdc3C42c211. Supply fixed at
-  10,000,000,000 ARENA. $ARENA lists on PancakeSwap on Saturday,
-  7 November 2026 at 00:00 UTC.
+  10,000,000,000 ARENA. $ARENA lists on PancakeSwap on Monday,
+  9 November 2026 at 00:00 UTC.
 - Claim contract: 0x3452E984bFBB2A24F33D633bBFfC8Abbfc3DB80B
 - Every seat claims 250,000 ARENA, ONCE per tokenId (the tokenId IS the
   seat number). The seat is never burned and stays in the wallet.

@@ -74,7 +74,7 @@
   // 4) Marquee fakta berjalan di bawah tombol klaim
   var actions = document.querySelector(".claim-actions");
   if (actions && !document.getElementById("claim-marquee")) {
-    var items = ["250,000 ARENA PER SEAT", "CLAIMS OPEN NOW", "YOUR SEAT IS NEVER BURNED", "ONE CLAIM PER SEAT NUMBER", "CLAIM THROUGH YOUR OWN AGENT", "$ARENA · PANCAKESWAP · SAT 7 NOV 2026"];
+    var items = ["250,000 ARENA PER SEAT", "CLAIMS OPEN NOW", "YOUR SEAT IS NEVER BURNED", "ONE CLAIM PER SEAT NUMBER", "CLAIM THROUGH YOUR OWN AGENT", "$ARENA · PANCAKESWAP · MON 9 NOV 2026"];
     var half = items.map(function (t) { return '<span class="cm-item">' + t + '</span>'; }).join('<span class="cm-dot">◆</span>');
     var m = document.createElement("div");
     m.id = "claim-marquee";
